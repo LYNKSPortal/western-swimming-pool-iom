@@ -33,14 +33,17 @@ export default function AdmissionPricesPage() {
           </h2>
           <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {admissionPrices.map((price) => (
-              <Card key={price.label} className="flex flex-col gap-2 p-6 text-center">
+              <Card key={price.label} className="flex h-full flex-col items-center gap-3 p-6 pt-7 text-center">
                 <span className="font-display text-4xl font-extrabold text-western-red">
                   £{price.price.toFixed(2)}
                 </span>
-                <span className="font-semibold text-deep-ink">{price.label}</span>
-                {price.note ? (
-                  <span className="text-xs text-muted-foreground">{price.note}</span>
-                ) : null}
+                <span className="h-px w-10 bg-border" aria-hidden />
+                <div className="flex flex-1 flex-col items-center gap-1">
+                  <span className="font-semibold text-deep-ink">{price.label}</span>
+                  <span className="min-h-[2.2em] text-xs leading-snug text-muted-foreground">
+                    {price.note ?? ""}
+                  </span>
+                </div>
               </Card>
             ))}
           </div>

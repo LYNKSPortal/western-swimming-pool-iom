@@ -41,8 +41,8 @@ export function SiteHeader() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         scrolled || open
-          ? "bg-white/90 shadow-[var(--shadow-soft)] backdrop-blur-lg"
-          : "bg-white/0"
+          ? "bg-white/95 shadow-[var(--shadow-soft)] backdrop-blur-lg"
+          : "bg-white"
       )}
     >
       <a href="#main-content" className="skip-link">
@@ -69,24 +69,6 @@ export function SiteHeader() {
             </span>
           </Link>
 
-          <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
-            {primaryNav.map((link) => {
-              const active = pathname === link.href || pathname.startsWith(link.href + "/");
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "rounded-full px-3.5 py-2 text-sm font-semibold text-deep-ink/75 transition-colors hover:bg-ice-blue hover:text-western-red",
-                    active && "bg-ice-blue text-western-red"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-
           <div className="hidden items-center gap-2 lg:flex">
             <Button asChild variant="outline" size="sm">
               <Link href="/timetable">
@@ -111,6 +93,31 @@ export function SiteHeader() {
           </button>
         </div>
       </Container>
+
+      <nav aria-label="Primary" className="hidden bg-western-red lg:block">
+        <Container>
+          <div className="flex items-center justify-center gap-1">
+            {primaryNav.map((link) => {
+              const active = pathname === link.href || pathname.startsWith(link.href + "/");
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "relative px-4 py-3 text-sm font-semibold text-white/85 transition-colors hover:bg-white/10 hover:text-white",
+                    active && "text-white"
+                  )}
+                >
+                  {link.label}
+                  {active ? (
+                    <span className="absolute inset-x-4 bottom-1.5 h-0.5 rounded-full bg-heritage-yellow" />
+                  ) : null}
+                </Link>
+              );
+            })}
+          </div>
+        </Container>
+      </nav>
 
       <AnimatePresence>
         {open ? (

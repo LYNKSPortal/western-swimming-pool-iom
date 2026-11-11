@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, Waves, ArrowRight } from "lucide-react";
+import { CalendarDays, Waves } from "lucide-react";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/shared/reveal";
-import { quickLinks, siteConfig } from "@/lib/data/site";
+import { siteConfig } from "@/lib/data/site";
 
 export function Hero() {
   return (
@@ -23,7 +23,7 @@ export function Hero() {
         <div className="animate-wave absolute -bottom-10 left-0 h-32 w-[140%] bg-[radial-gradient(ellipse_at_center,_rgba(114,184,245,0.35),_transparent_70%)]" />
       </div>
 
-      <Container className="relative flex min-h-[86vh] flex-col justify-end gap-10 pb-16 pt-40 sm:min-h-[92vh] sm:pb-20">
+      <Container className="relative flex min-h-[76vh] flex-col justify-center gap-10 py-16 sm:min-h-[80vh]">
         <Reveal className="flex max-w-3xl flex-col gap-6">
           <span className="inline-flex w-fit items-center gap-2 rounded-full bg-heritage-yellow px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-deep-ink">
             Derby Road, Peel, Isle of Man
@@ -48,24 +48,6 @@ export function Hero() {
                 <CalendarDays /> View timetable
               </Link>
             </Button>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.15}>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {quickLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="group flex flex-col gap-1 rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/20"
-              >
-                <span className="flex items-center justify-between font-display text-sm font-bold text-white">
-                  {link.label}
-                  <ArrowRight className="size-4 text-pool-blue opacity-0 transition-opacity group-hover:opacity-100" />
-                </span>
-                <span className="text-xs leading-relaxed text-white/65">{link.description}</span>
-              </Link>
-            ))}
           </div>
         </Reveal>
       </Container>

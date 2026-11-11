@@ -1,4 +1,5 @@
 import { Hero } from "@/components/home/hero";
+import { QuickLinksBanner } from "@/components/home/quick-links-banner";
 import { UpcomingSessions } from "@/components/home/upcoming-sessions";
 import { FacilitiesIntro } from "@/components/home/facilities-intro";
 import { LessonHighlights } from "@/components/home/lesson-highlights";
@@ -13,6 +14,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <QuickLinksBanner />
       <UpcomingSessions />
       <FacilitiesIntro />
       <LessonHighlights />

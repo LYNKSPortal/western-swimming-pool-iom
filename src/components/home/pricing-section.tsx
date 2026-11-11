@@ -22,15 +22,18 @@ export function PricingSection() {
 
         <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {admissionPrices.map((price, i) => (
-            <Reveal key={price.label} delay={i * 0.04}>
-              <Card className="flex h-full flex-col gap-2 p-5 text-center">
+            <Reveal key={price.label} delay={i * 0.04} className="h-full">
+              <Card className="flex h-full flex-col items-center gap-3 p-5 pt-6 text-center">
                 <span className="font-display text-3xl font-extrabold text-western-red">
                   £{price.price.toFixed(2)}
                 </span>
-                <span className="text-sm font-semibold text-deep-ink">{price.label}</span>
-                {price.note ? (
-                  <span className="text-xs text-muted-foreground">{price.note}</span>
-                ) : null}
+                <span className="h-px w-10 bg-border" aria-hidden />
+                <div className="flex flex-1 flex-col items-center gap-1">
+                  <span className="text-sm font-semibold text-deep-ink">{price.label}</span>
+                  <span className="min-h-[2.2em] text-xs leading-snug text-muted-foreground">
+                    {price.note ?? ""}
+                  </span>
+                </div>
               </Card>
             </Reveal>
           ))}
