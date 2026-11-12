@@ -21,7 +21,7 @@ export function ActivitiesSection() {
             eyebrow="Other activities"
             eyebrowVariant="green"
             title="Public swimming, with plenty more besides"
-            description="Aquafit, Silver Club and Peel Swimming Club — plus support and coaching for people of all ages with special needs."
+            description="Aquafit, Silver Club and Peel Swimming Club, plus support and coaching for people of all ages with special needs."
           />
           <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-lifted)]">
             <Image

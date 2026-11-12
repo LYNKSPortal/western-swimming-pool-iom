@@ -13,7 +13,7 @@ export function NewsletterForm() {
       <div className="flex items-start gap-2 rounded-xl border border-pool-blue/30 bg-pool-blue/10 p-4 text-sm text-white">
         <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-pool-blue" />
         <p>
-          Thanks for your interest! Our newsletter sign-up isn&apos;t connected yet — please check
+          Thanks for your interest! Our newsletter sign-up isn&apos;t connected yet, please check
           back soon, or follow us on Facebook for updates in the meantime.
         </p>
       </div>

@@ -51,7 +51,7 @@ export function LessonFinder() {
           <h3 className="font-display text-xl font-bold text-deep-ink">Lesson finder</h3>
           <p className="text-sm text-muted-foreground">
             Tell us roughly who&apos;s swimming and what they want to get out of it, and we&apos;ll
-            suggest programmes worth exploring. This is just a starting point — our teachers decide
+            suggest programmes worth exploring. This is just a starting point, our teachers decide
             official stage placement in person.
           </p>
         </div>
@@ -105,7 +105,7 @@ export function LessonFinder() {
           ))
         ) : (
           <p className="rounded-xl border border-dashed border-border p-5 text-sm text-muted-foreground">
-            We couldn&apos;t find an exact match — give us a call on 01624 842525 and we&apos;ll help
+            We couldn&apos;t find an exact match, give us a call on 01624 842525 and we&apos;ll help
             you find the right fit.
           </p>
         )}
@@ -114,7 +114,7 @@ export function LessonFinder() {
       <div className="flex items-start gap-2 rounded-xl bg-pool-blue/10 p-4 text-xs text-deep-ink/80">
         <Info className="mt-0.5 size-4 shrink-0 text-pool-blue-dark" />
         <p>
-          This tool suggests programmes to explore — it does not assess swimming ability or assign
+          This tool suggests programmes to explore, it does not assess swimming ability or assign
           official Swim England stages. Our teachers confirm the right starting point in person.
         </p>
       </div>

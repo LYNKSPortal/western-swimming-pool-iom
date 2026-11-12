@@ -28,7 +28,7 @@ export function CafeSection() {
             Refuel, relax and let the kids run wild
           </h2>
           <p className="max-w-lg text-balance text-base text-white/80 sm:text-lg">
-            Café West is the warm and welcoming heart of the pool — all-day breakfasts, sandwiches,
+            Café West is the warm and welcoming heart of the pool, all-day breakfasts, sandwiches,
             jacket potatoes, hot drinks and homemade cakes with ringside views over the Main Pool.
             Outside, our state-of-the-art playground keeps little ones entertained for hours.
           </p>

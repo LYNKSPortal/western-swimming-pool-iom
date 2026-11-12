@@ -28,7 +28,7 @@ export function UpcomingSessions() {
             eyebrow="Public swimming"
             eyebrowVariant="blue"
             title="Next public swim sessions"
-            description="A live look at the soonest sessions across our Main Pool and Leisure Pool. Always closed on bank holidays — check social media for last-minute changes."
+            description="A live look at the soonest sessions across our Main Pool and Leisure Pool. Always closed on bank holidays, check social media for last-minute changes."
           />
           <Button asChild variant="outline">
             <Link href="/timetable">

@@ -40,7 +40,7 @@ export function PageHero({
         <div className="absolute inset-0 bg-gradient-to-r from-deep-ink/80 via-transparent to-transparent" />
       </div>
       <Container className="relative flex min-h-[34vh] flex-col justify-end gap-5 py-16 sm:min-h-[40vh] sm:py-20">
-        {eyebrow ? <Badge variant={eyebrowVariant}>{eyebrow}</Badge> : null}
+        {eyebrow ? <Badge variant={eyebrowVariant} className="w-fit">{eyebrow}</Badge> : null}
         <h1 className="text-balance font-display text-4xl font-extrabold text-white sm:text-5xl lg:text-6xl">
           {title}
         </h1>

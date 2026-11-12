@@ -26,12 +26,12 @@ export const ticketOptions: TicketOption[] = [
     description: "Great value admission for 2 adults and up to 3 children.",
   },
   {
-    label: "10 Swim Saver — Adult",
+    label: "10 Swim Saver, Adult",
     price: 45.0,
     description: "Ten adult admissions, use them whenever suits you.",
   },
   {
-    label: "10 Swim Saver — Senior / Child",
+    label: "10 Swim Saver, Senior / Child",
     price: 35.0,
     description: "Ten senior or child admissions at a discounted rate.",
   },

@@ -19,7 +19,7 @@ export const historyTimeline: TimelineEntry[] = [
     year: "1920s",
     title: "The pool's heyday",
     description:
-      "A bathing platform, changing rooms, toilet facilities and café were added — the heyday of the pool, packed all summer long with locals and tourists alike.",
+      "A bathing platform, changing rooms, toilet facilities and café were added, the heyday of the pool, packed all summer long with locals and tourists alike.",
   },
   {
     year: "1950s",

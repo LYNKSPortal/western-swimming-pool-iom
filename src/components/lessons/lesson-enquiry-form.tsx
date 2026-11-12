@@ -121,9 +121,9 @@ export function LessonEnquiryForm() {
       ...children.map((child, i) => {
         const months = child.dob ? ageInMonths(child.dob) : null;
         const skill = skillLevelOptions.find((s) => s.value === child.skillLevel)?.label ?? "";
-        return `  ${i + 1}. ${child.name || "(name not given)"} — DOB: ${
+        return `  ${i + 1}. ${child.name || "(name not given)"}, DOB: ${
           child.dob || "not given"
-        }${months !== null ? ` (approx. ${formatAge(months)} old)` : ""} — Skill level: ${skill}`;
+        }${months !== null ? ` (approx. ${formatAge(months)} old)` : ""}, Skill level: ${skill}`;
       }),
     ];
 
@@ -139,7 +139,7 @@ export function LessonEnquiryForm() {
     if (prerequisites.length > 0) {
       bodyLines.push(
         "",
-        `Eligibility confirmed: ${allPrerequisitesConfirmed ? "Yes" : "Not fully confirmed — please discuss"}`
+        `Eligibility confirmed: ${allPrerequisitesConfirmed ? "Yes" : "Not fully confirmed, please discuss"}`
       );
     }
 
@@ -156,7 +156,7 @@ export function LessonEnquiryForm() {
         <ShieldCheck className="mt-0.5 size-5 shrink-0 text-pool-blue-dark" />
         <p>
           We ask for each child&apos;s date of birth and approximate skill level so we can suggest
-          the right programme. We don&apos;t collect medical information online — mention anything
+          the right programme. We don&apos;t collect medical information online, mention anything
           relevant in your message and we&apos;ll discuss it by phone. Sending this opens your email
           app with everything pre-filled; nothing goes anywhere until you press send.
         </p>
@@ -325,7 +325,7 @@ export function LessonEnquiryForm() {
                             </span>
                           ) : feedback.withinRange === false ? (
                             <span className="flex items-center gap-1 font-semibold text-western-red">
-                              <AlertCircle className="size-3.5" /> outside typical range — we&apos;ll help
+                              <AlertCircle className="size-3.5" /> outside typical range, we&apos;ll help
                               find the right fit
                             </span>
                           ) : null}
@@ -417,7 +417,7 @@ export function LessonEnquiryForm() {
           <Send /> Send enquiry by email
         </Button>
         <p className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Mail className="size-3.5" /> This opens your email app with the details filled in —
+          <Mail className="size-3.5" /> This opens your email app with the details filled in,
           nothing is sent until you press send.
         </p>
       </form>

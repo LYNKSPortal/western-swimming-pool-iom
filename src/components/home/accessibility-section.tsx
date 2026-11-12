@@ -24,7 +24,7 @@ export function AccessibilitySection() {
             eyebrow="Accessibility"
             eyebrowVariant="green"
             title="Everyone in the community deserves to get in the water"
-            description="We're committed to making sure everyone can access our facilities, activities and equipment — with discounted entry for disabled swimmers and their carer."
+            description="We're committed to making sure everyone can access our facilities, activities and equipment, with discounted entry for disabled swimmers and their carer."
           />
           <ul className="grid gap-3 sm:grid-cols-2">
             {points.map((point) => (

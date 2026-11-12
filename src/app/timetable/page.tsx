@@ -76,7 +76,7 @@ export default function TimetablePage() {
         <div className="flex items-start gap-3 rounded-2xl border border-border bg-white p-5 text-sm text-muted-foreground">
           <Info className="mt-0.5 size-5 shrink-0 text-pool-blue-dark" />
           <p>
-            Timetables are updated regularly for school holidays, half-terms and special events —
+            Timetables are updated regularly for school holidays, half-terms and special events,
             this page reflects the most recently published schedule. If anything looks unclear or
             out of date, please call us on 01624 842525 to confirm before you travel.
           </p>

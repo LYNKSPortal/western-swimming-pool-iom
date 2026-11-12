@@ -22,7 +22,7 @@ export default function OtherActivitiesPage() {
       <PageHero
         eyebrow="Other activities"
         title="Whatever your age, ability and water goals"
-        description="There's something for you in our exciting range of pool-based activities — plus support and coaching for people of all ages with special needs."
+        description="There's something for you in our exciting range of pool-based activities, plus support and coaching for people of all ages with special needs."
         image="/images/hero-wide-pool.jpg"
         imageAlt="Wide angle of the main swimming pool"
       />
@@ -83,7 +83,7 @@ export default function OtherActivitiesPage() {
             eyebrow="Special needs support"
             eyebrowVariant="green"
             title="Tailored coaching for people of all ages"
-            description="Our experienced teachers will tailor sessions to you, whatever your needs — get in touch to find out more."
+            description="Our experienced teachers will tailor sessions to you, whatever your needs, get in touch to find out more."
           />
           <Button asChild size="lg">
             <Link href="/contact">

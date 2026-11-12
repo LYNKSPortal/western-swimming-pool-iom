@@ -15,7 +15,7 @@ import { successStories } from "@/lib/data/stories";
 export const metadata: Metadata = {
   title: "Swimming Lessons",
   description:
-    "Swimming lessons at Western Swimming Pool, Peel — from four months old through Aquanatal, pre-school, junior stages, lifesaving and adult coaching.",
+    "Swimming lessons at Western Swimming Pool, Peel, from four months old through Aquanatal, pre-school, junior stages, lifesaving and adult coaching.",
 };
 
 const sorted = [...lessonProgrammes].sort((a, b) => a.order - b.order);
@@ -26,7 +26,7 @@ export default function SwimmingLessonsPage() {
       <PageHero
         eyebrow="Swimming lessons"
         title="From babies to teens and beyond"
-        description="Our friendly, well-equipped pool is the perfect place for any swimmer's journey — and you couldn't be in safer hands than those of our professional teachers and coaches."
+        description="Our friendly, well-equipped pool is the perfect place for any swimmer's journey, and you couldn't be in safer hands than those of our professional teachers and coaches."
         image="/images/hero-wide-pool.jpg"
         imageAlt="Wide angled view of the main pool"
       >

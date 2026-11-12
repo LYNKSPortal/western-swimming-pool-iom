@@ -33,7 +33,7 @@ export function Hero() {
             <span className="text-pool-blue"> Your next adventure.</span>
           </h1>
           <p className="max-w-xl text-balance text-lg text-white/85 sm:text-xl">
-            {siteConfig.tagline}. Swim, learn, train and relax at the heart of Peel &mdash;
+            {siteConfig.tagline}. Swim, learn, train and relax at the heart of Peel,
             with a 25m six-lane main pool, a family leisure pool, swimming lessons for every
             age, and Café West for when you&apos;re done.
           </p>

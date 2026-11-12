@@ -22,7 +22,7 @@ export function ContactForm() {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const subject = `${form.type} — Western Swimming Pool website`;
+    const subject = `${form.type}, Western Swimming Pool website`;
     const body = [
       `Name: ${form.name}`,
       `Email: ${form.email}`,
@@ -100,7 +100,7 @@ export function ContactForm() {
         <Send /> Send message by email
       </Button>
       <p className="flex items-center gap-2 text-xs text-muted-foreground">
-        <Mail className="size-3.5" /> This opens your email app with the details filled in —
+        <Mail className="size-3.5" /> This opens your email app with the details filled in,
         nothing is sent until you press send.
       </p>
     </form>

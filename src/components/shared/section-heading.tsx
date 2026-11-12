@@ -27,7 +27,11 @@ export function SectionHeading({
         className
       )}
     >
-      {eyebrow ? <Badge variant={eyebrowVariant}>{eyebrow}</Badge> : null}
+      {eyebrow ? (
+        <Badge variant={eyebrowVariant} className="w-fit self-start">
+          {eyebrow}
+        </Badge>
+      ) : null}
       <h2 className="text-balance font-display text-3xl font-extrabold leading-tight text-deep-ink sm:text-4xl lg:text-5xl">
         {title}
       </h2>

@@ -53,7 +53,9 @@ export default async function LessonProgrammePage({
           <div className="absolute inset-0 bg-gradient-to-t from-deep-ink via-deep-ink/70 to-deep-ink/30" />
         </div>
         <Container className="relative flex min-h-[40vh] flex-col justify-end gap-4 py-16 sm:py-20">
-          <Badge variant="yellow">{lesson.audience}</Badge>
+          <Badge variant="yellow" className="w-fit self-start">
+            {lesson.audience}
+          </Badge>
           <h1 className="font-display text-4xl font-extrabold text-white sm:text-5xl">{lesson.name}</h1>
           <p className="max-w-2xl text-balance text-base text-white/85 sm:text-lg">{lesson.summary}</p>
         </Container>

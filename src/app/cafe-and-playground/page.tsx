@@ -26,7 +26,7 @@ export default function CafePage() {
       <PageHero
         eyebrow="Café West"
         title="The warm, welcoming heart of the pool"
-        description="From mums and tots to training groups, it's the perfect place to refuel and relax with friends — ideal for informal meetings too."
+        description="From mums and tots to training groups, it's the perfect place to refuel and relax with friends, ideal for informal meetings too."
         image="/images/cafe-2.jpg"
         imageAlt="View of the café and beyond over the main pool at Western Swimming Pool"
       />

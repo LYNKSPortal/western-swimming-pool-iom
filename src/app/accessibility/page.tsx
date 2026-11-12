@@ -11,7 +11,7 @@ import { siteConfig } from "@/lib/data/site";
 export const metadata: Metadata = {
   title: "Accessibility",
   description:
-    "Accessibility and disability access information for Western Swimming Pool, Peel — parking, entrances, changing rooms, hoist and wheelchair provision.",
+    "Accessibility and disability access information for Western Swimming Pool, Peel, parking, entrances, changing rooms, hoist and wheelchair provision.",
 };
 
 const points = [

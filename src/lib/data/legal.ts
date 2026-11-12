@@ -7,7 +7,7 @@ export const termsConditions: LegalSection[] = [
   {
     title: "1. Condition of pool premises",
     body: [
-      "The Western Swimming Pool will make all reasonable efforts to ensure that the pool premises — including the changing rooms, washing facilities, the pool and poolside area — are in a suitable condition. Users of the Western Swimming Pool are required to treat the building and equipment with respect and as intended. We ask you to report any observed defects and any accidents, however caused.",
+      "The Western Swimming Pool will make all reasonable efforts to ensure that the pool premises, including the changing rooms, washing facilities, the pool and poolside area, are in a suitable condition. Users of the Western Swimming Pool are required to treat the building and equipment with respect and as intended. We ask you to report any observed defects and any accidents, however caused.",
     ],
   },
   {
@@ -104,7 +104,7 @@ export const termsConditions: LegalSection[] = [
   {
     title: "15. Feedback, ideas and questions",
     body: [
-      "We welcome your feedback and ideas — please get in touch with our swimming lesson co-ordinator or the pool manager. If you have questions about pupils' progression, the teacher or swimming lesson co-ordinator will give you feedback.",
+      "We welcome your feedback and ideas, please get in touch with our swimming lesson co-ordinator or the pool manager. If you have questions about pupils' progression, the teacher or swimming lesson co-ordinator will give you feedback.",
     ],
   },
   {
@@ -125,7 +125,7 @@ export const privacyPolicy: LegalSection[] = [
   {
     title: "Summary",
     body: [
-      "We only collect personal information about you where necessary, or when you have consented — and we only collect information that we need.",
+      "We only collect personal information about you where necessary, or when you have consented, and we only collect information that we need.",
       "We will not send you marketing materials unless you have given us permission to do so, and we will not sell your information to third parties.",
       "We use third-party suppliers to help us give you the best service. Where we share information with those suppliers, we have the appropriate safeguards in place which will assess the security of their processing arrangements.",
       "We will protect your personal information with an appropriate combination of technical and organisational measures.",

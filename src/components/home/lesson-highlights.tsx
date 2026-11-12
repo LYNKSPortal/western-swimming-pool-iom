@@ -23,7 +23,7 @@ export function LessonHighlights() {
             eyebrow="Swimming lessons"
             eyebrowVariant="red"
             title="One of the Isle of Man's most varied learn-to-swim programmes"
-            description="From four months old right through to young adult — and adult lessons and coaching for everyone from beginners to budding triathletes."
+            description="From four months old right through to young adult, and adult lessons and coaching for everyone from beginners to budding triathletes."
           />
           <Button asChild variant="primary">
             <Link href="/swimming-lessons">

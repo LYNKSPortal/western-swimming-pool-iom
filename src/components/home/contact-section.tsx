@@ -37,7 +37,7 @@ export function ContactSection() {
             </a>
             <span className="flex items-start gap-3">
               <Clock className="mt-0.5 size-5 shrink-0 text-pool-blue" />
-              Opening times vary daily — see the full timetable for session times.
+              Opening times vary daily, see the full timetable for session times.
             </span>
           </div>
           <Button asChild size="lg" variant="accent" className="w-fit">

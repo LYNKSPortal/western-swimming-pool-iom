@@ -10,7 +10,7 @@ import { historyTimeline } from "@/lib/data/history";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "The history, facilities and community mission of Western Swimming Pool in Peel, Isle of Man — open since 2003.",
+    "The history, facilities and community mission of Western Swimming Pool in Peel, Isle of Man, open since 2003.",
 };
 
 const facilityPoints = [
@@ -32,7 +32,7 @@ const facilityPoints = [
   {
     icon: Users,
     title: "Our community",
-    text: "We're proud to be at the heart of Peel's community — from new parents in the water for the first time, to teenagers training for competition, to Silver Club members staying active in later life.",
+    text: "We're proud to be at the heart of Peel's community, from new parents in the water for the first time, to teenagers training for competition, to Silver Club members staying active in later life.",
   },
 ];
 
@@ -71,7 +71,7 @@ export default function AboutPage() {
             eyebrow="Our history"
             eyebrowVariant="yellow"
             title="Pools in Peel: a potted history"
-            description="From a Victorian seawater lido to today's modern facility — swimming has been part of life in Peel for well over a century."
+            description="From a Victorian seawater lido to today's modern facility, swimming has been part of life in Peel for well over a century."
           />
 
           <ol className="relative flex flex-col gap-10 border-l-2 border-dashed border-pool-blue/40 pl-8">

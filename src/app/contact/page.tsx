@@ -10,7 +10,7 @@ import { siteConfig } from "@/lib/data/site";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contact Western Swimming Pool in Peel, Isle of Man — address, phone number, location map and enquiry form.",
+    "Contact Western Swimming Pool in Peel, Isle of Man, address, phone number, location map and enquiry form.",
 };
 
 export default function ContactPage() {

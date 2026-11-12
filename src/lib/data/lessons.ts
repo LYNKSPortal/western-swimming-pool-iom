@@ -41,7 +41,7 @@ export type LessonProgramme = {
   /**
    * Typical age range in months, used only to give parents gentle, non-binding
    * guidance when enquiring (e.g. on the lesson booking form). This is an
-   * estimate for guidance only — official stage placement is always decided
+   * estimate for guidance only, official stage placement is always decided
    * by our teachers in person.
    */
   minAgeMonths?: number;
@@ -62,7 +62,7 @@ export const lessonProgrammes: LessonProgramme[] = [
       "Our Aquanatal classes combine relaxation, fitness and fun with other mums-to-be, run by a trained midwife.",
       "Sessions take place every Thursday. To put your name down, call the NSC (National Sports Centre) on 688588.",
     ],
-    schedule: "Every Thursday — call the NSC on 688588 to book",
+    schedule: "Every Thursday, call the NSC on 688588 to book",
     highlights: ["Led by a trained midwife", "Low-impact, water-supported exercise", "Friendly group of expectant mums"],
     image: "/images/two-pools-teacher.jpg",
     imageAlt: "Peel's small pool with the large pool in the background and a swimming teacher and swimmer",
@@ -207,7 +207,7 @@ export const lessonProgrammes: LessonProgramme[] = [
     summary: "A stepping stone towards the RLSS Bronze Medallion, pool helper or lifeguard roles.",
     description: [
       "Children aged 12+ who want to take lifesaving further can work towards the RLSS Bronze Medallion with the Survive & Save programme.",
-      "It's a great stepping stone to becoming a pool helper or even a lifeguard — get in touch to find out more.",
+      "It's a great stepping stone to becoming a pool helper or even a lifeguard, get in touch to find out more.",
     ],
     prerequisites: ["Aged 12 or over"],
     highlights: ["Works towards RLSS Bronze Medallion", "Pathway to pool helper or lifeguard", "Builds on Rookie Lifeguard skills"],
@@ -228,7 +228,7 @@ export const lessonProgrammes: LessonProgramme[] = [
     pool: "Varies",
     summary: "One-to-one coaching matched to the right specialist teacher for faster progress.",
     description: [
-      "There's no faster way for keen swimmers to progress than with one-to-one coaching. Different teachers have different specialities — we'll help match you up with the right one.",
+      "There's no faster way for keen swimmers to progress than with one-to-one coaching. Different teachers have different specialities, we'll help match you up with the right one.",
       "Each half-hour lesson costs £28.00 for one child, with £5 for each additional child up to a total of three.",
     ],
     highlights: ["30-minute 1:1 sessions", "£28 for one child", "+£5 per extra child (up to 3)"],
@@ -262,7 +262,7 @@ export const lessonProgrammes: LessonProgramme[] = [
     name: "Adult Coaching",
     shortName: "Adult Coaching",
     audience: "Adults",
-    ageRange: "Adults — all abilities",
+    ageRange: "Adults, all abilities",
     pool: "Main Pool",
     summary: "From complete beginners to budding triathletes, matched to a specialist coach.",
     description: [

@@ -121,7 +121,7 @@ export const timetable: PoolTimetable[] = [
 export const timetableNotices = [
   "The pool is closed on bank holidays.",
   "Please check our social media pages for any last-minute changes to sessions.",
-  `Timetable effective ${timetableEffective.from} to ${timetableEffective.to}. Future dates are subject to a new published timetable — please confirm before visiting after this period.`,
+  `Timetable effective ${timetableEffective.from} to ${timetableEffective.to}. Future dates are subject to a new published timetable, please confirm before visiting after this period.`,
 ];
 
 export function getPoolTimetable(pool: PoolName) {
