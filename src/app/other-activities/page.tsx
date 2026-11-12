@@ -13,7 +13,7 @@ import { otherActivities } from "@/lib/data/activities";
 export const metadata: Metadata = {
   title: "Other Activities",
   description:
-    "Aquafit, Silver Club, Peel Swimming Club, indoor kayaking and synchronised swimming at Western Swimming Pool, Peel.",
+    "Aquafit, Silver Club and Peel Swimming Club at Western Swimming Pool, Peel.",
 };
 
 export default function OtherActivitiesPage() {
@@ -23,13 +23,13 @@ export default function OtherActivitiesPage() {
         eyebrow="Other activities"
         title="Whatever your age, ability and water goals"
         description="There's something for you in our exciting range of pool-based activities — plus support and coaching for people of all ages with special needs."
-        image="/images/kayaking-3.jpg"
-        imageAlt="A group of three people in kayaks taking part in a kayaking session"
+        image="/images/hero-wide-pool.jpg"
+        imageAlt="Wide angle of the main swimming pool"
       />
       <Breadcrumbs items={[{ label: "Other activities" }]} />
 
       <Container className="flex flex-col gap-16 py-16">
-        <div className="grid gap-8 sm:grid-cols-2">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {otherActivities.map((activity) => (
             <Card key={activity.slug} className="flex flex-col overflow-hidden">
               <div className="relative aspect-[16/9]">

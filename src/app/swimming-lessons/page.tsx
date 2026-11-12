@@ -32,16 +32,7 @@ export default function SwimmingLessonsPage() {
       >
         <div className="flex flex-wrap gap-3 pt-2">
           <Button asChild size="lg" variant="primary">
-            <Link href="/swimming-lessons/register">Enquire about lessons</Link>
-          </Button>
-          <Button asChild size="lg" variant="outline-light">
-            <a
-              href="https://westernpool.courseprogress.co.uk/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Open booking portal
-            </a>
+            <Link href="/swimming-lessons/register">Book swimming lessons</Link>
           </Button>
         </div>
       </PageHero>

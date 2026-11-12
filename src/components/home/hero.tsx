@@ -39,9 +39,9 @@ export function Hero() {
           </p>
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <Button asChild size="lg" variant="primary">
-              <a href={siteConfig.bookingPortalUrl} target="_blank" rel="noopener noreferrer">
+              <Link href="/swimming-lessons/register">
                 <Waves /> Book swimming lessons
-              </a>
+              </Link>
             </Button>
             <Button asChild size="lg" variant="outline-light">
               <Link href="/timetable">

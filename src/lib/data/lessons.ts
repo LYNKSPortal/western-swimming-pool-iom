@@ -38,6 +38,14 @@ export type LessonProgramme = {
   cta?: { label: string; href: string };
   ageGroups: AgeGroupTag[];
   goals: GoalTag[];
+  /**
+   * Typical age range in months, used only to give parents gentle, non-binding
+   * guidance when enquiring (e.g. on the lesson booking form). This is an
+   * estimate for guidance only — official stage placement is always decided
+   * by our teachers in person.
+   */
+  minAgeMonths?: number;
+  maxAgeMonths?: number;
 };
 
 export const lessonProgrammes: LessonProgramme[] = [
@@ -80,6 +88,8 @@ export const lessonProgrammes: LessonProgramme[] = [
     order: 2,
     ageGroups: ["baby"],
     goals: ["confidence", "learn-to-swim"],
+    minAgeMonths: 4,
+    maxAgeMonths: 30,
   },
   {
     slug: "pre-school",
@@ -99,6 +109,8 @@ export const lessonProgrammes: LessonProgramme[] = [
     order: 3,
     ageGroups: ["preschool"],
     goals: ["confidence", "learn-to-swim"],
+    minAgeMonths: 24,
+    maxAgeMonths: 60,
   },
   {
     slug: "stages-1-3",
@@ -118,6 +130,8 @@ export const lessonProgrammes: LessonProgramme[] = [
     order: 4,
     ageGroups: ["junior"],
     goals: ["learn-to-swim", "confidence", "technique"],
+    minAgeMonths: 48,
+    maxAgeMonths: 108,
   },
   {
     slug: "stages-4-6",
@@ -137,6 +151,8 @@ export const lessonProgrammes: LessonProgramme[] = [
     order: 5,
     ageGroups: ["junior", "teen"],
     goals: ["technique", "confidence"],
+    minAgeMonths: 60,
+    maxAgeMonths: 156,
   },
   {
     slug: "stages-7-10",
@@ -156,6 +172,8 @@ export const lessonProgrammes: LessonProgramme[] = [
     order: 6,
     ageGroups: ["teen"],
     goals: ["competitive", "technique"],
+    minAgeMonths: 96,
+    maxAgeMonths: 216,
   },
   {
     slug: "rookie-lifeguard",
@@ -177,6 +195,7 @@ export const lessonProgrammes: LessonProgramme[] = [
     order: 7,
     ageGroups: ["junior", "teen"],
     goals: ["lifesaving"],
+    minAgeMonths: 96,
   },
   {
     slug: "survive-and-save",
@@ -192,12 +211,13 @@ export const lessonProgrammes: LessonProgramme[] = [
     ],
     prerequisites: ["Aged 12 or over"],
     highlights: ["Works towards RLSS Bronze Medallion", "Pathway to pool helper or lifeguard", "Builds on Rookie Lifeguard skills"],
-    image: "/images/kayaking-1.jpg",
-    imageAlt: "Instructor helping a kayaker in the main swimming pool",
+    image: "/images/hero-wide-pool.jpg",
+    imageAlt: "Wide angle of the main swimming pool",
     order: 8,
     cta: { label: "Get in touch", href: "/contact" },
     ageGroups: ["teen", "adult"],
     goals: ["lifesaving"],
+    minAgeMonths: 144,
   },
   {
     slug: "private-lessons",
@@ -255,6 +275,7 @@ export const lessonProgrammes: LessonProgramme[] = [
     order: 11,
     ageGroups: ["adult"],
     goals: ["learn-to-swim", "technique", "fitness", "competitive"],
+    minAgeMonths: 192,
   },
 ];
 

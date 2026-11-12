@@ -42,14 +42,30 @@ Per project requirements, no backend/database is wired up yet. The contact form,
 lesson enquiry form and newsletter signup are intentionally honest about this:
 
 - Contact & lesson enquiry forms build a `mailto:` link (opens the visitor's email
-  client) rather than silently pretending to submit to a server.
-- The lesson enquiry form deliberately does **not** collect a child's date of birth
-  or medical information online — those are sensitive and must wait for an approved,
-  secure backend, privacy notice and retention policy. Visitors are directed to call
-  or use the existing booking portal (https://westernpool.courseprogress.co.uk/)
-  instead.
+  client) rather than silently pretending to submit to a server — nothing is stored
+  server-side, so this carries the same privacy footprint as a parent emailing or
+  phoning the pool directly.
+- Per a later client request, the lesson enquiry form **does** now collect each
+  child's date of birth and a self-assessed skill level (needed to route people to
+  age-appropriate programmes, e.g. Adult & Child / Parent & Toddler). It still does
+  **not** collect medical information online — that remains sensitive and is deferred
+  to a phone conversation until an approved, secure backend, privacy notice and
+  retention policy are in place.
 - The newsletter form shows an honest "not connected yet" message rather than a fake
   success state.
+- All "Book lessons" CTAs site-wide (header, homepage hero, swimming lessons pages)
+  point to our own `/swimming-lessons/register` enquiry form. The external
+  `westernpool.courseprogress.co.uk` portal is no longer referenced anywhere on the
+  site, per client request — the internal form is now the only booking path until a
+  secure backend replaces it.
+- `src/components/lessons/lesson-enquiry-form.tsx` is a "smart" form driven by
+  `src/lib/data/lessons.ts`: selecting a programme surfaces its real age range, pool,
+  schedule and prerequisites (as a tappable checklist); each child row captures DOB
+  (checked against the programme's `minAgeMonths`/`maxAgeMonths` guidance via
+  `src/lib/age-utils.ts`, non-blocking) and skill level
+  (`src/lib/data/skill-levels.ts`); selecting "Private Lessons" reveals a live price
+  calculator (£28 for one child + £5 per extra child, up to 3) — all of it feeds into
+  the emailed enquiry.
 
 ### Design system
 

@@ -48,24 +48,4 @@ export const otherActivities: OtherActivity[] = [
     image: "/images/hero-lane-dividers.jpg",
     imageAlt: "Wide angled view of the main pool with lane dividers",
   },
-  {
-    slug: "indoor-kayaking",
-    name: "Indoor Kayaking",
-    summary: "A unique way to build water confidence and paddling skills indoors.",
-    description: [
-      "Indoor kayaking sessions give paddlers of all ages the chance to build confidence and core kayaking skills in the safety of the pool, supported by experienced instructors.",
-    ],
-    image: "/images/kayaking-2.jpg",
-    imageAlt: "A kayaking training session taking place with the coach helping a child get into a kayak",
-  },
-  {
-    slug: "synchronised-swimming",
-    name: "Synchronised Swimming",
-    summary: "Artistic swimming sessions combining technique, timing and teamwork.",
-    description: [
-      "Synchronised (artistic) swimming sessions combine stroke technique, timing and teamwork in the water — ask the team for current availability.",
-    ],
-    image: "/images/pool-floats.jpg",
-    imageAlt: "Pink pool noodles at the side of the small swimming pool",
-  },
 ];

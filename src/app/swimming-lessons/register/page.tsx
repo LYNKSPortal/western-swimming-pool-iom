@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Phone, ExternalLink } from "lucide-react";
+import { Phone } from "lucide-react";
 import { PageHero } from "@/components/shared/page-hero";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { Container } from "@/components/shared/container";
@@ -10,38 +10,25 @@ import { LessonEnquiryForm } from "@/components/lessons/lesson-enquiry-form";
 import { siteConfig } from "@/lib/data/site";
 
 export const metadata: Metadata = {
-  title: "Register for Swimming Lessons",
+  title: "Book Swimming Lessons",
   description:
-    "Enquire about swimming lessons at Western Swimming Pool, or register directly through our online booking portal.",
+    "Book or enquire about swimming lessons at Western Swimming Pool using our interactive programme-aware enquiry form.",
 };
 
 export default function RegisterPage() {
   return (
     <>
       <PageHero
-        eyebrow="Sign up for lessons"
+        eyebrow="Book swimming lessons"
         title="Let's get your family in the water"
-        description="Fill in a quick enquiry, call the team, or jump straight into our online booking portal."
+        description="Pick a programme and fill in a quick enquiry — our form shows the age range, eligibility and pricing as you go. Our team will call you back to confirm and complete registration."
         image="/images/leisure-pool-3.jpg"
         imageAlt="Western swimming pool's little pool"
       />
-      <Breadcrumbs items={[{ label: "Swimming lessons", href: "/swimming-lessons" }, { label: "Register" }]} />
+      <Breadcrumbs items={[{ label: "Swimming lessons", href: "/swimming-lessons" }, { label: "Book lessons" }]} />
 
-      <Container className="grid gap-10 py-16 lg:grid-cols-[1fr_1.1fr]">
+      <Container className="grid gap-10 py-16 lg:grid-cols-[1fr_1.4fr]">
         <div className="flex flex-col gap-6">
-          <Card className="flex flex-col gap-4 p-7">
-            <h2 className="font-display text-xl font-bold text-deep-ink">Prefer to book online?</h2>
-            <p className="text-sm text-muted-foreground">
-              Our existing booking portal lets you register and manage swimming lesson places
-              directly.
-            </p>
-            <Button asChild size="lg">
-              <a href={siteConfig.bookingPortalUrl} target="_blank" rel="noopener noreferrer">
-                Open booking portal <ExternalLink />
-              </a>
-            </Button>
-          </Card>
-
           <Card className="flex flex-col gap-4 p-7">
             <h2 className="font-display text-xl font-bold text-deep-ink">Prefer to call?</h2>
             <p className="text-sm text-muted-foreground">

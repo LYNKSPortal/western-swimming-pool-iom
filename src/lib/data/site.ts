@@ -15,7 +15,6 @@ export const siteConfig = {
   phone: "01624 842525",
   phoneHref: "tel:01624842525",
   email: "reception@westernswimmingpool.im",
-  bookingPortalUrl: "https://westernpool.courseprogress.co.uk/",
   nscPhone: "688588",
   socials: {
     facebook: "https://www.facebook.com/westernswimmingpool",
@@ -56,7 +55,7 @@ export const footerNav: { heading: string; links: NavLink[] }[] = [
       { label: "About us", href: "/about" },
       { label: "Accessibility", href: "/accessibility" },
       { label: "Contact", href: "/contact" },
-      { label: "Register for lessons", href: "/swimming-lessons/register" },
+      { label: "Book swimming lessons", href: "/swimming-lessons/register" },
     ],
   },
   {

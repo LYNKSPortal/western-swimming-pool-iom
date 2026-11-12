@@ -9,7 +9,7 @@ import { Menu, X, CalendarDays, Waves } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/container";
-import { primaryNav, siteConfig } from "@/lib/data/site";
+import { primaryNav } from "@/lib/data/site";
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -76,9 +76,9 @@ export function SiteHeader() {
               </Link>
             </Button>
             <Button asChild variant="primary" size="sm">
-              <a href={siteConfig.bookingPortalUrl} target="_blank" rel="noopener noreferrer">
+              <Link href="/swimming-lessons/register">
                 <Waves /> Book lessons
-              </a>
+              </Link>
             </Button>
           </div>
 
@@ -145,9 +145,9 @@ export function SiteHeader() {
                   </Link>
                 </Button>
                 <Button asChild variant="primary" size="lg" className="w-full">
-                  <a href={siteConfig.bookingPortalUrl} target="_blank" rel="noopener noreferrer">
+                  <Link href="/swimming-lessons/register">
                     <Waves /> Book swimming lessons
-                  </a>
+                  </Link>
                 </Button>
               </div>
             </Container>

@@ -21,12 +21,12 @@ export function ActivitiesSection() {
             eyebrow="Other activities"
             eyebrowVariant="green"
             title="Public swimming, with plenty more besides"
-            description="Aquafit, Silver Club, Peel Swimming Club, synchronised swimming, indoor kayaking — plus support and coaching for people of all ages with special needs."
+            description="Aquafit, Silver Club and Peel Swimming Club — plus support and coaching for people of all ages with special needs."
           />
           <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-lifted)]">
             <Image
-              src="/images/kayaking-3.jpg"
-              alt="A group of three people in kayaks taking part in a kayaking session at the swimming pool"
+              src="/images/pool-ceiling.jpg"
+              alt="Wide angle view of Peel's main swimming pool showing the vaulted wooden ceiling and lanes"
               fill
               sizes="(min-width: 1024px) 35vw, 90vw"
               className="object-cover"
@@ -53,17 +53,6 @@ export function ActivitiesSection() {
               </Card>
             </Reveal>
           ))}
-          <Reveal delay={0.18} className="sm:col-span-2">
-            <Card className="flex flex-col gap-2 border-dashed p-6">
-              <h3 className="font-display text-lg font-bold text-deep-ink">
-                Indoor kayaking & synchronised swimming
-              </h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                We also run indoor kayaking sessions and synchronised swimming — a brilliant way to
-                try something new in the water. Get in touch for current availability.
-              </p>
-            </Card>
-          </Reveal>
         </div>
       </Container>
     </section>
