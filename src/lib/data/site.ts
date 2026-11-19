@@ -55,7 +55,7 @@ export const footerNav: { heading: string; links: NavLink[] }[] = [
       { label: "About us", href: "/about" },
       { label: "Accessibility", href: "/accessibility" },
       { label: "Contact", href: "/contact" },
-      { label: "Book swimming lessons", href: "/swimming-lessons/register" },
+      { label: "Sign up to lessons", href: "/swimming-lessons/register" },
     ],
   },
   {

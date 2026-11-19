@@ -32,7 +32,7 @@ export default function SwimmingLessonsPage() {
       >
         <div className="flex flex-wrap gap-3 pt-2">
           <Button asChild size="lg" variant="primary">
-            <Link href="/swimming-lessons/register">Book swimming lessons</Link>
+            <Link href="/swimming-lessons/register">Sign up to lessons</Link>
           </Button>
         </div>
       </PageHero>

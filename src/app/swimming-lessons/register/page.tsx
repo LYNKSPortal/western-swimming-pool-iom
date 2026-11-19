@@ -10,22 +10,22 @@ import { LessonEnquiryForm } from "@/components/lessons/lesson-enquiry-form";
 import { siteConfig } from "@/lib/data/site";
 
 export const metadata: Metadata = {
-  title: "Book Swimming Lessons",
+  title: "Sign Up to Swimming Lessons",
   description:
-    "Book or enquire about swimming lessons at Western Swimming Pool using our interactive programme-aware enquiry form.",
+    "Sign up or enquire about swimming lessons at Western Swimming Pool using our interactive programme-aware enquiry form.",
 };
 
 export default function RegisterPage() {
   return (
     <>
       <PageHero
-        eyebrow="Book swimming lessons"
+        eyebrow="Sign up to lessons"
         title="Let's get your family in the water"
         description="Pick a programme and fill in a quick enquiry, our form shows the age range, eligibility and pricing as you go. Our team will call you back to confirm and complete registration."
         image="/images/leisure-pool-3.jpg"
         imageAlt="Western swimming pool's little pool"
       />
-      <Breadcrumbs items={[{ label: "Swimming lessons", href: "/swimming-lessons" }, { label: "Book lessons" }]} />
+      <Breadcrumbs items={[{ label: "Swimming lessons", href: "/swimming-lessons" }, { label: "Sign up" }]} />
 
       <Container className="flex flex-col gap-10 py-16">
         <div className="mx-auto w-full max-w-3xl">

@@ -77,7 +77,7 @@ export function SiteHeader() {
             </Button>
             <Button asChild variant="primary" size="sm">
               <Link href="/swimming-lessons/register">
-                <Waves /> Book lessons
+                <Waves /> Sign up to lessons
               </Link>
             </Button>
           </div>
@@ -146,7 +146,7 @@ export function SiteHeader() {
                 </Button>
                 <Button asChild variant="primary" size="lg" className="w-full">
                   <Link href="/swimming-lessons/register">
-                    <Waves /> Book swimming lessons
+                    <Waves /> Sign up to lessons
                   </Link>
                 </Button>
               </div>

@@ -40,7 +40,7 @@ export function Hero() {
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <Button asChild size="lg" variant="primary">
               <Link href="/swimming-lessons/register">
-                <Waves /> Book swimming lessons
+                <Waves /> Sign up to lessons
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline-light">
