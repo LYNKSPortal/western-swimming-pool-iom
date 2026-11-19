@@ -143,8 +143,8 @@ function DayColumn({
   const lanes = useMemo(() => assignLanes(sessions), [sessions]);
 
   return (
-    <div className="flex min-w-[160px] flex-1 flex-col border-r border-border last:border-r-0">
-      <div className="flex flex-col items-center justify-center gap-0.5 border-b border-border bg-ice-blue/40 py-2">
+    <div className="flex w-full flex-col border-b border-border last:border-b-0 lg:min-w-[160px] lg:flex-1 lg:border-b-0 lg:border-r lg:last:border-r-0">
+      <div className="flex flex-row items-center justify-between gap-2 border-b border-border bg-ice-blue/40 px-3 py-2 lg:flex-col lg:justify-center lg:gap-0.5">
         <span className="text-xs font-bold text-deep-ink">{scheduleDayLabels[day]}</span>
         <span className="text-[10px] text-muted-foreground">
           {date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
@@ -307,9 +307,9 @@ export function ScheduleCalendar() {
         in time order per day; cards size to fit their content so nothing is ever cut off.
       </p>
 
-      {/* Grid */}
-      <div className="overflow-x-auto rounded-2xl border border-border bg-white">
-        <div className="flex min-w-[900px] items-stretch">
+      {/* Grid: stacked full-width days on mobile/tablet, side-by-side columns from lg up */}
+      <div className="rounded-2xl border border-border bg-white lg:overflow-x-auto">
+        <div className="flex flex-col lg:min-w-[900px] lg:flex-row lg:items-stretch">
           {daysToShow.map((d) => {
             const colDate = new Date(weekStart);
             colDate.setDate(colDate.getDate() + d);
