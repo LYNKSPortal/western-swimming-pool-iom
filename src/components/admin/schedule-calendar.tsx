@@ -10,12 +10,6 @@ import {
   type ScheduleSession,
 } from "@/lib/data/admin-sample-schedule";
 
-const START_HOUR = 8;
-const END_HOUR = 19;
-const ROW_HEIGHT = 60; // px per 30 minutes
-const MIN_BLOCK_HEIGHT = 60; // enough room for time/capacity + class name + teacher
-const TOTAL_ROWS = (END_HOUR - START_HOUR) * 2;
-
 const colorStyles: Record<ScheduleColor, string> = {
   pink: "bg-pink-100 border-pink-300 text-pink-900",
   blue: "bg-pool-blue/20 border-pool-blue/50 text-deep-ink",
@@ -58,100 +52,123 @@ function formatRange(weekStart: Date) {
   )} (Week ${isoWeekNumber(weekStart)})`;
 }
 
-/** Greedy lane assignment so overlapping sessions sit side-by-side instead of stacking. */
+/**
+ * Greedy lane assignment so overlapping sessions sit side-by-side instead of
+ * on top of one another, then returns each lane as its own chronological
+ * list. Cards within a lane are rendered in normal document flow (stacked
+ * top-to-bottom, each sized to its own content) rather than absolutely
+ * positioned against a fixed-height time grid — that's what guarantees a
+ * card can never clip its own text or overlap its neighbour, no matter how
+ * much text it has or how short its time slot is.
+ */
 function assignLanes(sessions: ScheduleSession[]) {
   const sorted = [...sessions].sort((a, b) => toMinutes(a.start) - toMinutes(b.start));
   const lanes: ScheduleSession[][] = [];
-  const laneOf = new Map<string, number>();
 
   for (const session of sorted) {
     let placed = false;
-    for (let i = 0; i < lanes.length; i++) {
-      const lane = lanes[i];
+    for (const lane of lanes) {
       const last = lane[lane.length - 1];
       if (toMinutes(last.end) <= toMinutes(session.start)) {
         lane.push(session);
-        laneOf.set(session.id, i);
         placed = true;
         break;
       }
     }
-    if (!placed) {
-      lanes.push([session]);
-      laneOf.set(session.id, lanes.length - 1);
-    }
+    if (!placed) lanes.push([session]);
   }
-  return { laneCount: lanes.length || 1, laneOf };
+  return lanes;
 }
 
-const HEADER_LINE_HEIGHT = 16;
-const TEXT_LINE_HEIGHT = 15;
-const BLOCK_VERTICAL_PADDING = 12; // py-1.5 top + bottom
-const BLOCK_GAP = 3; // gap-0.5 between stacked lines
-
-function SessionBlock({
+function SessionCard({
   session,
-  lane,
-  laneCount,
   showTeachers,
   showAreas,
 }: {
   session: ScheduleSession;
-  lane: number;
-  laneCount: number;
   showTeachers: boolean;
   showAreas: boolean;
 }) {
-  const top = ((toMinutes(session.start) - START_HOUR * 60) / 30) * ROW_HEIGHT;
-  const durationHeight = ((toMinutes(session.end) - toMinutes(session.start)) / 30) * ROW_HEIGHT;
   const isFull = session.capacity.booked >= session.capacity.max;
-  const width = 100 / laneCount;
 
   // Detail line combines teacher + area so toggling both on only ever adds
-  // one extra line, not two, and the block always has room for its text.
+  // one extra line, not two.
   const detailParts = [showTeachers ? session.teacher : null, showAreas ? session.area : null].filter(
     Boolean
   );
   const hasDetailLine = detailParts.length > 0;
-  const classNameLines = session.className.length > 16 ? 2 : 1;
-  const lineCount = 1 + classNameLines + (hasDetailLine ? 1 : 0);
-  const contentHeight =
-    HEADER_LINE_HEIGHT +
-    classNameLines * TEXT_LINE_HEIGHT +
-    (hasDetailLine ? TEXT_LINE_HEIGHT : 0) +
-    BLOCK_VERTICAL_PADDING +
-    (lineCount - 1) * BLOCK_GAP;
-
-  const height = Math.max(durationHeight, MIN_BLOCK_HEIGHT, contentHeight);
 
   return (
     <div
       className={cn(
-        "absolute flex flex-col gap-0.5 overflow-hidden rounded-lg border px-2 py-1.5 text-[11px] leading-snug shadow-sm",
+        "flex flex-col gap-0.5 rounded-lg border px-2 py-1.5 text-[11px] leading-snug shadow-sm",
         colorStyles[session.color]
       )}
-      style={{
-        top,
-        height,
-        left: `${lane * width}%`,
-        width: `calc(${width}% - 4px)`,
-      }}
-      title={`${session.className}, ${session.teacher}, ${session.area}`}
     >
       <div className="flex items-start justify-between gap-1">
-        <span className="font-bold">{session.start}</span>
+        <span className="font-bold">
+          {session.start}–{session.end}
+        </span>
         {isFull ? (
-          <span className="rounded bg-western-red px-1 text-[9px] font-bold text-white">FULL</span>
+          <span className="shrink-0 rounded bg-western-red px-1 text-[9px] font-bold text-white">
+            FULL
+          </span>
         ) : (
-          <span className="text-[10px] font-semibold opacity-70">
+          <span className="shrink-0 text-[10px] font-semibold opacity-70">
             {session.capacity.booked}/{session.capacity.max}
           </span>
         )}
       </div>
-      <span className="line-clamp-2 font-semibold">{session.className}</span>
+      <span className="font-semibold break-words">{session.className}</span>
       {hasDetailLine ? (
-        <span className="truncate text-[10px] opacity-75">{detailParts.join(" · ")}</span>
+        <span className="break-words text-[10px] opacity-75">{detailParts.join(" · ")}</span>
       ) : null}
+    </div>
+  );
+}
+
+function DayColumn({
+  day,
+  date,
+  sessions,
+  showTeachers,
+  showAreas,
+}: {
+  day: number;
+  date: Date;
+  sessions: ScheduleSession[];
+  showTeachers: boolean;
+  showAreas: boolean;
+}) {
+  const lanes = useMemo(() => assignLanes(sessions), [sessions]);
+
+  return (
+    <div className="flex min-w-[160px] flex-1 flex-col border-r border-border last:border-r-0">
+      <div className="flex flex-col items-center justify-center gap-0.5 border-b border-border bg-ice-blue/40 py-2">
+        <span className="text-xs font-bold text-deep-ink">{scheduleDayLabels[day]}</span>
+        <span className="text-[10px] text-muted-foreground">
+          {date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+        </span>
+      </div>
+
+      {lanes.length === 0 ? (
+        <div className="flex-1 p-3 text-center text-[11px] text-muted-foreground">No sessions</div>
+      ) : (
+        <div className="flex flex-1 gap-1.5 p-1.5">
+          {lanes.map((lane, laneIndex) => (
+            <div key={laneIndex} className="flex flex-1 flex-col gap-1.5">
+              {lane.map((session) => (
+                <SessionCard
+                  key={session.id}
+                  session={session}
+                  showTeachers={showTeachers}
+                  showAreas={showAreas}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -181,7 +198,6 @@ export function ScheduleCalendar() {
     [courseFilter]
   );
 
-  const hours = Array.from({ length: END_HOUR - START_HOUR + 1 }, (_, i) => START_HOUR + i);
   const daysToShow = view === "week" ? [0, 1, 2, 3, 4, 5] : [dayIndex];
 
   function shiftWeek(delta: number) {
@@ -287,64 +303,25 @@ export function ScheduleCalendar() {
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Sample data shown for layout purposes only, not a live class schedule.
+        Sample data shown for layout purposes only, not a live class schedule. Sessions are listed
+        in time order per day; cards size to fit their content so nothing is ever cut off.
       </p>
 
       {/* Grid */}
       <div className="overflow-x-auto rounded-2xl border border-border bg-white">
-        <div className="flex min-w-[720px]">
-          {/* Time gutter */}
-          <div className="w-16 shrink-0 border-r border-border">
-            <div className="h-10 border-b border-border" />
-            {hours.map((h) => (
-              <div
-                key={h}
-                className="relative text-right text-[11px] text-muted-foreground"
-                style={{ height: ROW_HEIGHT * 2 }}
-              >
-                <span className="absolute -top-2 right-2">{String(h).padStart(2, "0")}:00</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Day columns */}
+        <div className="flex min-w-[900px] items-stretch">
           {daysToShow.map((d) => {
-            const daySessions = filtered.filter((s) => s.day === d);
-            const { laneOf, laneCount } = assignLanes(daySessions);
             const colDate = new Date(weekStart);
             colDate.setDate(colDate.getDate() + d);
-
             return (
-              <div key={d} className="relative flex-1 border-r border-border last:border-r-0">
-                <div className="flex h-10 flex-col items-center justify-center border-b border-border bg-ice-blue/40">
-                  <span className="text-xs font-bold text-deep-ink">{scheduleDayLabels[d]}</span>
-                  <span className="text-[10px] text-muted-foreground">
-                    {colDate.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
-                  </span>
-                </div>
-                <div className="relative" style={{ height: ROW_HEIGHT * TOTAL_ROWS }}>
-                  {Array.from({ length: TOTAL_ROWS }, (_, i) => (
-                    <div
-                      key={i}
-                      className={cn(
-                        "absolute inset-x-0 border-b border-dashed border-border/60",
-                        i % 2 === 1 && "border-border/30"
-                      )}
-                      style={{ top: i * ROW_HEIGHT, height: ROW_HEIGHT }}
-                    />
-                  ))}
-                  {daySessions.map((session) => (
-                    <SessionBlock
-                      key={session.id}
-                      session={session}
-                      lane={laneOf.get(session.id) ?? 0}
-                      laneCount={laneCount}
-                      showTeachers={showTeachers}
-                      showAreas={showAreas || showSessionSpace}
-                    />
-                  ))}
-                </div>
-              </div>
+              <DayColumn
+                key={d}
+                day={d}
+                date={colDate}
+                sessions={filtered.filter((s) => s.day === d)}
+                showTeachers={showTeachers}
+                showAreas={showAreas || showSessionSpace}
+              />
             );
           })}
         </div>
