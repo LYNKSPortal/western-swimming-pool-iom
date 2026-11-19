@@ -308,7 +308,7 @@ export function ScheduleCalendar() {
       </p>
 
       {/* Grid: stacked full-width days on mobile/tablet, side-by-side columns from lg up */}
-      <div className="rounded-2xl border border-border bg-white lg:overflow-x-auto">
+      <div className="overflow-x-hidden overflow-y-hidden rounded-md border border-border bg-white lg:overflow-x-auto">
         <div className="flex flex-col lg:min-w-[900px] lg:flex-row lg:items-stretch">
           {daysToShow.map((d) => {
             const colDate = new Date(weekStart);
