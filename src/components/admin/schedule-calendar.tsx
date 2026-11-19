@@ -12,7 +12,8 @@ import {
 
 const START_HOUR = 8;
 const END_HOUR = 19;
-const ROW_HEIGHT = 44; // px per 30 minutes
+const ROW_HEIGHT = 60; // px per 30 minutes
+const MIN_BLOCK_HEIGHT = 60; // enough room for time/capacity + class name + teacher
 const TOTAL_ROWS = (END_HOUR - START_HOUR) * 2;
 
 const colorStyles: Record<ScheduleColor, string> = {
@@ -99,7 +100,7 @@ function SessionBlock({
   const top = ((toMinutes(session.start) - START_HOUR * 60) / 30) * ROW_HEIGHT;
   const height = Math.max(
     ((toMinutes(session.end) - toMinutes(session.start)) / 30) * ROW_HEIGHT,
-    28
+    MIN_BLOCK_HEIGHT
   );
   const isFull = session.capacity.booked >= session.capacity.max;
   const width = 100 / laneCount;
@@ -107,7 +108,7 @@ function SessionBlock({
   return (
     <div
       className={cn(
-        "absolute flex flex-col gap-0.5 overflow-hidden rounded-lg border px-2 py-1 text-[11px] leading-tight shadow-sm",
+        "absolute flex flex-col gap-0.5 overflow-hidden rounded-lg border px-2 py-1.5 text-[11px] leading-snug shadow-sm",
         colorStyles[session.color]
       )}
       style={{
@@ -116,7 +117,7 @@ function SessionBlock({
         left: `${lane * width}%`,
         width: `calc(${width}% - 4px)`,
       }}
-      title={`${session.className} — ${session.teacher}`}
+      title={`${session.className}, ${session.teacher}`}
     >
       <div className="flex items-start justify-between gap-1">
         <span className="font-bold">{session.start}</span>
@@ -128,8 +129,10 @@ function SessionBlock({
           </span>
         )}
       </div>
-      <span className="truncate font-semibold">{session.className}</span>
-      {showTeachers ? <span className="truncate opacity-80">{session.teacher}</span> : null}
+      <span className="line-clamp-2 font-semibold">{session.className}</span>
+      {showTeachers ? (
+        <span className="block truncate opacity-80">{session.teacher}</span>
+      ) : null}
       {showAreas ? <span className="truncate text-[10px] opacity-60">{session.area}</span> : null}
     </div>
   );
