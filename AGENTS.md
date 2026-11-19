@@ -36,23 +36,63 @@ touching components.
 - Real facility photography (not AI-generated) was downloaded from the existing
   WordPress media library and lives in `public/images/`.
 
+### Database (Neon Postgres)
+
+The site is now backed by a dedicated Neon project (`western-swimming-pool`,
+`aws-eu-central-1`), linked via `.neon` (git-ignored). `.env.local` (also
+git-ignored) holds `DATABASE_URL` / `DATABASE_URL_UNPOOLED`, pulled with
+`neon env pull` — re-run `neon link` / `neon env pull` if they go missing.
+
+- `src/lib/db/schema.sql` — schema (currently just `lesson_enquiries`). Apply
+  changes with `npm run db:migrate` (`scripts/migrate.mjs`, idempotent
+  `create table if not exists`, uses the unpooled connection for DDL).
+- `src/lib/db/client.ts` — `server-only` tagged-template `sql` client
+  (`@neondatabase/serverless`, pooled connection). Never import it from a
+  Client Component.
+- `src/lib/db/lesson-enquiries.ts` — insert/list/update-status queries.
+  `src/lib/db/types.ts` has the shared row types.
+
 ### Forms & sensitive data
 
-Per project requirements, no backend/database is wired up yet. The contact form,
-lesson enquiry form and newsletter signup are intentionally honest about this:
+- The **lesson enquiry form** (`/swimming-lessons/register`) now submits to a
+  real Server Action (`src/lib/actions/lesson-enquiry.ts` →
+  `submitLessonEnquiry`) that validates input and inserts a row into
+  `lesson_enquiries` in Postgres, including each child's date of birth and
+  self-assessed skill level (per client request — needed to route people to
+  age-appropriate programmes, e.g. Adult & Child / Parent & Toddler). It still
+  does **not** collect medical information online — mention anything relevant
+  in the free-text message field instead; that remains sensitive and is
+  deferred to a phone conversation.
+- The **contact form** and **newsletter form** are unchanged: they still build
+  a `mailto:` link / show an honest "not connected yet" message respectively,
+  rather than silently pretending to submit to a server. Only the lesson
+  enquiry form was asked to persist to the database.
 
-- Contact & lesson enquiry forms build a `mailto:` link (opens the visitor's email
-  client) rather than silently pretending to submit to a server — nothing is stored
-  server-side, so this carries the same privacy footprint as a parent emailing or
-  phoning the pool directly.
-- Per a later client request, the lesson enquiry form **does** now collect each
-  child's date of birth and a self-assessed skill level (needed to route people to
-  age-appropriate programmes, e.g. Adult & Child / Parent & Toddler). It still does
-  **not** collect medical information online — that remains sensitive and is deferred
-  to a phone conversation until an approved, secure backend, privacy notice and
-  retention policy are in place.
-- The newsletter form shows an honest "not connected yet" message rather than a fake
-  success state.
+### Staff admin dashboard (`/admin`)
+
+A minimal, real (not mocked) admin area lists incoming lesson enquiries and
+lets staff update their status (new/contacted/booked/archived):
+
+- `/admin/login` — password form (`ADMIN_PASSWORD` env var, compared
+  server-side only). `/admin` — the dashboard itself.
+- Auth is a signed, stateless session cookie (JWT via `jose`, `HS256`,
+  `SESSION_SECRET` env var, 12h expiry) — see `src/lib/auth/session.ts`,
+  `src/lib/actions/admin-auth.ts` (`loginAdmin` / `logoutAdmin`).
+- `src/proxy.ts` does an **optimistic** redirect to `/admin/login` when the
+  session cookie is absent (matcher: `/admin/:path*`). The real check lives in
+  the Data Access Layer, `src/lib/auth/dal.ts` (`verifySession` /
+  `requireAdminSession`), called from every protected page/action — per
+  Next.js's own guidance that Proxy/Middleware should never be the only line
+  of defense.
+- `src/components/layout/site-chrome.tsx` hides the public header/footer/
+  announcement bar on `/admin/*` routes (checked client-side via `usePathname`,
+  since the public chrome lives in the shared root layout).
+- `/admin` is disallowed in `robots.ts` and omitted from `sitemap.ts`.
+- This is intentionally a single shared-password tool, good enough for one or
+  two staff members. If multiple named accounts, password reset, or an audit
+  log are ever needed, replace it with Neon Auth (Managed Better Auth) via the
+  `neon-auth` skill rather than extending this by hand.
+- Required env vars (see `.env.example`): `ADMIN_PASSWORD`, `SESSION_SECRET`.
 - All "Book lessons" CTAs site-wide (header, homepage hero, swimming lessons pages)
   point to our own `/swimming-lessons/register` enquiry form. The external
   `westernpool.courseprogress.co.uk` portal is no longer referenced anywhere on the

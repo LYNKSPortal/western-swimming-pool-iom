@@ -1,9 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import {
-  Mail,
-  Send,
   ShieldCheck,
   Clock,
   Waves,
@@ -14,6 +12,9 @@ import {
   AlertCircle,
   Plus,
   X,
+  Loader2,
+  PartyPopper,
+  Phone,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +27,7 @@ import { lessonProgrammes } from "@/lib/data/lessons";
 import { skillLevelOptions, type SkillLevel } from "@/lib/data/skill-levels";
 import { siteConfig } from "@/lib/data/site";
 import { ageInMonths, formatAge } from "@/lib/age-utils";
+import { submitLessonEnquiry } from "@/lib/actions/lesson-enquiry";
 
 const PRIVATE_LESSON_SLUG = "private-lessons";
 const PRIVATE_LESSON_BASE_PRICE = 28;
@@ -59,6 +61,10 @@ export function LessonEnquiryForm() {
   });
   const [children, setChildren] = useState<ChildDetails[]>([emptyChild()]);
   const [confirmedPrerequisites, setConfirmedPrerequisites] = useState<Record<string, boolean>>({});
+  const [isPending, startTransition] = useTransition();
+  const [result, setResult] = useState<{ status: "success" | "error"; message: string } | null>(
+    null
+  );
 
   const programme = lessonProgrammes.find((l) => l.slug === form.programme);
   const isPrivateLessons = form.programme === PRIVATE_LESSON_SLUG;
@@ -110,44 +116,52 @@ export function LessonEnquiryForm() {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const subject = `Swimming lesson enquiry: ${programme?.name ?? "General"}`;
-    const bodyLines = [
-      `Name: ${form.name}`,
-      `Phone: ${form.phone}`,
-      `Email: ${form.email}`,
-      `Programme of interest: ${programme?.name ?? ""}`,
-      "",
-      "Children:",
-      ...children.map((child, i) => {
-        const months = child.dob ? ageInMonths(child.dob) : null;
-        const skill = skillLevelOptions.find((s) => s.value === child.skillLevel)?.label ?? "";
-        return `  ${i + 1}. ${child.name || "(name not given)"}, DOB: ${
-          child.dob || "not given"
-        }${months !== null ? ` (approx. ${formatAge(months)} old)` : ""}, Skill level: ${skill}`;
-      }),
-    ];
+    setResult(null);
 
-    if (isPrivateLessons) {
-      bodyLines.push(
-        "",
-        `Estimated private lesson price: £${privateLessonPrice.toFixed(2)} (30 min session, ${
-          children.length
-        } ${children.length === 1 ? "child" : "children"})`
-      );
-    }
+    const payload = {
+      parentName: form.name,
+      parentPhone: form.phone,
+      parentEmail: form.email,
+      programmeSlug: form.programme,
+      availability: form.availability,
+      message: form.message,
+      eligibilityConfirmed: prerequisites.length > 0 ? allPrerequisitesConfirmed : null,
+      children: children.map((child) => ({
+        name: child.name,
+        dob: child.dob,
+        skillLevel: child.skillLevel,
+        approxAgeMonths: child.dob ? ageInMonths(child.dob) : null,
+      })),
+    };
 
-    if (prerequisites.length > 0) {
-      bodyLines.push(
-        "",
-        `Eligibility confirmed: ${allPrerequisitesConfirmed ? "Yes" : "Not fully confirmed, please discuss"}`
-      );
-    }
+    startTransition(async () => {
+      const response = await submitLessonEnquiry(payload);
+      if (response.status === "success") {
+        setResult({ status: "success", message: response.message ?? "" });
+      } else {
+        setResult({
+          status: "error",
+          message: response.message ?? "Something went wrong, please try again.",
+        });
+      }
+    });
+  }
 
-    bodyLines.push("", `Preferred days/times: ${form.availability}`, "", form.message);
-
-    window.location.href = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
+  if (result?.status === "success") {
+    return (
+      <Card className="flex flex-col items-center gap-4 p-10 text-center">
+        <PartyPopper className="size-10 text-western-red" />
+        <h2 className="font-display text-2xl font-bold text-deep-ink">Enquiry sent!</h2>
+        <p className="max-w-md text-sm text-muted-foreground">{result.message}</p>
+        <p className="text-sm text-muted-foreground">
+          Our team will be in touch soon. In a hurry? Call us on{" "}
+          <a href={siteConfig.phoneHref} className="font-semibold text-western-red">
+            {siteConfig.phone}
+          </a>
+          .
+        </p>
+      </Card>
+    );
   }
 
   return (
@@ -156,9 +170,9 @@ export function LessonEnquiryForm() {
         <ShieldCheck className="mt-0.5 size-5 shrink-0 text-pool-blue-dark" />
         <p>
           We ask for each child&apos;s date of birth and approximate skill level so we can suggest
-          the right programme. We don&apos;t collect medical information online, mention anything
-          relevant in your message and we&apos;ll discuss it by phone. Sending this opens your email
-          app with everything pre-filled; nothing goes anywhere until you press send.
+          the right programme. This is sent securely to our team, we don&apos;t collect medical
+          information online; mention anything relevant in your message and we&apos;ll discuss it
+          by phone.
         </p>
       </div>
 
@@ -413,12 +427,31 @@ export function LessonEnquiryForm() {
           </div>
         </div>
 
-        <Button type="submit" size="lg">
-          <Send /> Send enquiry by email
+        {result?.status === "error" ? (
+          <div className="flex items-start gap-2 rounded-xl bg-western-red/10 p-4 text-sm text-western-red">
+            <AlertCircle className="mt-0.5 size-4 shrink-0" />
+            <p>
+              {result.message} You can also call us on{" "}
+              <a href={siteConfig.phoneHref} className="font-semibold underline">
+                {siteConfig.phone}
+              </a>
+              .
+            </p>
+          </div>
+        ) : null}
+
+        <Button type="submit" size="lg" disabled={isPending}>
+          {isPending ? (
+            <>
+              <Loader2 className="animate-spin" /> Sending your enquiry…
+            </>
+          ) : (
+            "Send enquiry"
+          )}
         </Button>
         <p className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Mail className="size-3.5" /> This opens your email app with the details filled in,
-          nothing is sent until you press send.
+          <Phone className="size-3.5" /> Prefer to talk it through first? Call us on{" "}
+          {siteConfig.phone}.
         </p>
       </form>
     </Card>
