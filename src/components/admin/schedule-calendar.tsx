@@ -84,6 +84,11 @@ function assignLanes(sessions: ScheduleSession[]) {
   return { laneCount: lanes.length || 1, laneOf };
 }
 
+const HEADER_LINE_HEIGHT = 16;
+const TEXT_LINE_HEIGHT = 15;
+const BLOCK_VERTICAL_PADDING = 12; // py-1.5 top + bottom
+const BLOCK_GAP = 3; // gap-0.5 between stacked lines
+
 function SessionBlock({
   session,
   lane,
@@ -98,12 +103,26 @@ function SessionBlock({
   showAreas: boolean;
 }) {
   const top = ((toMinutes(session.start) - START_HOUR * 60) / 30) * ROW_HEIGHT;
-  const height = Math.max(
-    ((toMinutes(session.end) - toMinutes(session.start)) / 30) * ROW_HEIGHT,
-    MIN_BLOCK_HEIGHT
-  );
+  const durationHeight = ((toMinutes(session.end) - toMinutes(session.start)) / 30) * ROW_HEIGHT;
   const isFull = session.capacity.booked >= session.capacity.max;
   const width = 100 / laneCount;
+
+  // Detail line combines teacher + area so toggling both on only ever adds
+  // one extra line, not two, and the block always has room for its text.
+  const detailParts = [showTeachers ? session.teacher : null, showAreas ? session.area : null].filter(
+    Boolean
+  );
+  const hasDetailLine = detailParts.length > 0;
+  const classNameLines = session.className.length > 16 ? 2 : 1;
+  const lineCount = 1 + classNameLines + (hasDetailLine ? 1 : 0);
+  const contentHeight =
+    HEADER_LINE_HEIGHT +
+    classNameLines * TEXT_LINE_HEIGHT +
+    (hasDetailLine ? TEXT_LINE_HEIGHT : 0) +
+    BLOCK_VERTICAL_PADDING +
+    (lineCount - 1) * BLOCK_GAP;
+
+  const height = Math.max(durationHeight, MIN_BLOCK_HEIGHT, contentHeight);
 
   return (
     <div
@@ -117,7 +136,7 @@ function SessionBlock({
         left: `${lane * width}%`,
         width: `calc(${width}% - 4px)`,
       }}
-      title={`${session.className}, ${session.teacher}`}
+      title={`${session.className}, ${session.teacher}, ${session.area}`}
     >
       <div className="flex items-start justify-between gap-1">
         <span className="font-bold">{session.start}</span>
@@ -130,10 +149,9 @@ function SessionBlock({
         )}
       </div>
       <span className="line-clamp-2 font-semibold">{session.className}</span>
-      {showTeachers ? (
-        <span className="block truncate opacity-80">{session.teacher}</span>
+      {hasDetailLine ? (
+        <span className="truncate text-[10px] opacity-75">{detailParts.join(" · ")}</span>
       ) : null}
-      {showAreas ? <span className="truncate text-[10px] opacity-60">{session.area}</span> : null}
     </div>
   );
 }
