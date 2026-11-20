@@ -5,10 +5,10 @@ import { quickLinks } from "@/lib/data/site";
 
 export function QuickLinksBanner() {
   return (
-    <section className="relative z-10 -mt-10 bg-deep-ink pb-10 pt-8 sm:-mt-12 sm:bg-transparent sm:pb-20 sm:pt-0">
+    <section className="relative z-10 bg-deep-ink py-8 sm:py-12">
       <div className="mx-auto w-full max-w-7xl sm:px-8 lg:px-10">
         <Reveal>
-          <div className="grid gap-3 bg-deep-ink p-4 shadow-[var(--shadow-lifted)] sm:grid-cols-2 sm:rounded-[var(--radius-2xl)] sm:p-5 lg:grid-cols-4">
+          <div className="grid gap-3 p-4 sm:grid-cols-2 sm:gap-4 sm:p-0 lg:grid-cols-4">
             {quickLinks.map((link) => (
               <Link
                 key={link.href}
