@@ -41,7 +41,11 @@ export function ActivitiesSection() {
 
         <div className="grid gap-5 sm:grid-cols-2">
           {featured.map((activity, i) => (
-            <Reveal key={activity.slug} delay={i * 0.06}>
+            <Reveal
+              key={activity.slug}
+              delay={i * 0.06}
+              className={i === featured.length - 1 && featured.length % 2 === 1 ? "sm:col-span-2" : undefined}
+            >
               <Card className="flex h-full flex-col gap-3 p-6">
                 <h3 className="font-display text-xl font-bold text-deep-ink">{activity.name}</h3>
                 <p className="text-sm leading-relaxed text-muted-foreground">{activity.summary}</p>
