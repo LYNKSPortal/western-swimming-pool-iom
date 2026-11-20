@@ -84,12 +84,15 @@ export function SiteHeader() {
 
           <button
             type="button"
-            className="flex size-11 items-center justify-center rounded-full border border-border text-deep-ink lg:hidden"
+            className="flex items-center gap-2 lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+            <span className="text-sm font-bold text-deep-ink">Menu</span>
+            <span className="flex size-11 items-center justify-center rounded-full border border-border text-deep-ink">
+              {open ? <X className="size-5" /> : <Menu className="size-5" />}
+            </span>
           </button>
         </div>
       </Container>
