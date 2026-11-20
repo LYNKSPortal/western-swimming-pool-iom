@@ -22,7 +22,19 @@ export type TimetableSession = {
   end: string;
 };
 
-export const timetableNotices = [
-  "The pool is closed on bank holidays.",
-  "Please check our social media pages for any last-minute changes to sessions.",
+export type TimetableNotice = {
+  text: string;
+  href?: string;
+};
+
+export const timetableNotices: TimetableNotice[] = [
+  { text: "This timetable is valid 02/11/2026–22/12/2026." },
+  { text: "The pool is closed on bank holidays." },
+  { text: "All times are subject to change at management's discretion." },
+  { text: "The Main Pool has 6 lanes." },
+  { text: "The Leisure Pool is warmer and suitable for babies and small children." },
+  {
+    text: "Please check our social media pages for any last-minute changes to sessions.",
+    href: "https://www.facebook.com/WesternSwimmingPool",
+  },
 ];

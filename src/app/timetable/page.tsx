@@ -37,7 +37,20 @@ export default async function TimetablePage() {
           <AlertTriangle className="mt-0.5 size-5 shrink-0 text-western-red" />
           <ul className="flex flex-col gap-1.5">
             {timetableNotices.map((notice) => (
-              <li key={notice}>{notice}</li>
+              <li key={notice.text}>
+                {notice.href ? (
+                  <a
+                    href={notice.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-western-red"
+                  >
+                    {notice.text}
+                  </a>
+                ) : (
+                  notice.text
+                )}
+              </li>
             ))}
           </ul>
         </div>
@@ -48,11 +61,11 @@ export default async function TimetablePage() {
           <h2 className="font-display text-2xl font-bold text-deep-ink">
             Full week at a glance
           </h2>
-          <div className="flex flex-col gap-10 overflow-x-auto">
+          <div className="flex flex-col gap-10">
             {pools.map((pool) => (
-              <div key={pool} className="min-w-[720px]">
+              <div key={pool}>
                 <h3 className="mb-3 font-display text-lg font-bold text-pool-blue-dark">{pool}</h3>
-                <div className="grid grid-cols-7 gap-2">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
                   {weekdays.map((day) => {
                     const daySessions = sessions.filter((s) => s.pool === pool && s.day === day);
                     return (

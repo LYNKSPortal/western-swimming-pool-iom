@@ -1,39 +1,54 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { useState, useTransition } from "react";
+import { AlertCircle, ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { submitNewsletterSignup } from "@/lib/actions/newsletter";
 
 export function NewsletterForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ firstName: "", lastName: "", email: "" });
+  const [isPending, startTransition] = useTransition();
+  const [result, setResult] = useState<{ status: "success" | "error"; message: string } | null>(
+    null
+  );
 
-  if (submitted) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setResult(null);
+
+    startTransition(async () => {
+      const response = await submitNewsletterSignup(form);
+      if (response.status === "success") {
+        setResult({ status: "success", message: response.message ?? "" });
+      } else {
+        setResult({
+          status: "error",
+          message: response.message ?? "Something went wrong, please try again.",
+        });
+      }
+    });
+  }
+
+  if (result?.status === "success") {
     return (
       <div className="flex items-start gap-2 rounded-xl border border-pool-blue/30 bg-pool-blue/10 p-4 text-sm text-white">
         <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-pool-blue" />
-        <p>
-          Thanks for your interest! Our newsletter sign-up isn&apos;t connected yet, please check
-          back soon, or follow us on Facebook for updates in the meantime.
-        </p>
+        <p>{result.message}</p>
       </div>
     );
   }
 
   return (
-    <form
-      className="flex flex-col gap-3"
-      onSubmit={(event) => {
-        event.preventDefault();
-        setSubmitted(true);
-      }}
-    >
+    <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-2">
         <Input
           required
           name="firstName"
           placeholder="First name"
           aria-label="First name"
+          value={form.firstName}
+          onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))}
           className="border-white/15 bg-white/10 text-white placeholder:text-white/40"
         />
         <Input
@@ -41,6 +56,8 @@ export function NewsletterForm() {
           name="lastName"
           placeholder="Last name"
           aria-label="Last name"
+          value={form.lastName}
+          onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
           className="border-white/15 bg-white/10 text-white placeholder:text-white/40"
         />
       </div>
@@ -50,10 +67,26 @@ export function NewsletterForm() {
         name="email"
         placeholder="Email address"
         aria-label="Email address"
+        value={form.email}
+        onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
         className="border-white/15 bg-white/10 text-white placeholder:text-white/40"
       />
-      <Button type="submit" variant="accent" size="md" className="w-full">
-        Sign up <ArrowRight />
+      {result?.status === "error" ? (
+        <div className="flex items-start gap-2 rounded-xl bg-western-red/10 p-3 text-xs text-white">
+          <AlertCircle className="mt-0.5 size-3.5 shrink-0" />
+          <p>{result.message}</p>
+        </div>
+      ) : null}
+      <Button type="submit" variant="accent" size="md" className="w-full" disabled={isPending}>
+        {isPending ? (
+          <>
+            <Loader2 className="animate-spin" /> Sending…
+          </>
+        ) : (
+          <>
+            Sign up <ArrowRight />
+          </>
+        )}
       </Button>
     </form>
   );

@@ -18,7 +18,7 @@ export const siteConfig = {
   bookingPortalUrl: "https://westernpool.courseprogress.co.uk/onlinejoining/home",
   nscPhone: "688588",
   socials: {
-    facebook: "https://www.facebook.com/westernswimmingpool",
+    facebook: "https://www.facebook.com/WesternSwimmingPool",
   },
 } as const;
 

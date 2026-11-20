@@ -2,6 +2,7 @@
 
 import { insertLessonEnquiry } from "@/lib/db/lesson-enquiries";
 import { getLessonBySlug } from "@/lib/data/lessons";
+import { sendLessonEnquiryNotification } from "@/lib/email/notifications";
 
 export type SubmitLessonEnquiryState = {
   status: "idle" | "success" | "error";
@@ -36,6 +37,9 @@ export async function submitLessonEnquiry(input: {
     return { status: "error", message: "Please choose a valid programme." };
   }
 
+  const availability = input.availability.trim();
+  const message = input.message.trim();
+
   try {
     await insertLessonEnquiry({
       parentName,
@@ -43,8 +47,8 @@ export async function submitLessonEnquiry(input: {
       parentEmail,
       programmeSlug: programme.slug,
       programmeName: programme.name,
-      availability: input.availability.trim(),
-      message: input.message.trim(),
+      availability,
+      message,
     });
   } catch (error) {
     console.error("Failed to save lesson enquiry", error);
@@ -53,6 +57,15 @@ export async function submitLessonEnquiry(input: {
       message: "Something went wrong saving your enquiry. Please call us instead.",
     };
   }
+
+  await sendLessonEnquiryNotification({
+    parentName,
+    parentPhone,
+    parentEmail,
+    programmeName: programme.name,
+    availability,
+    message,
+  });
 
   return { status: "success", message: "Thanks! Your enquiry has been sent to our team." };
 }

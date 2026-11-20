@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { Mail, Send } from "lucide-react";
+import { useState, useTransition } from "react";
+import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/data/site";
+import { submitContactForm } from "@/lib/actions/contact";
 
 const enquiryTypes = ["General enquiry", "Report a problem", "Private / party hire"];
 
@@ -19,22 +20,35 @@ export function ContactForm() {
     type: enquiryTypes[0],
     message: "",
   });
+  const [isPending, startTransition] = useTransition();
+  const [result, setResult] = useState<{ status: "success" | "error"; message: string } | null>(
+    null
+  );
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const subject = `${form.type}, Western Swimming Pool website`;
-    const body = [
-      `Name: ${form.name}`,
-      `Email: ${form.email}`,
-      `Telephone: ${form.phone}`,
-      `Enquiry type: ${form.type}`,
-      "",
-      form.message,
-    ].join("\n");
+    setResult(null);
 
-    window.location.href = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
+    startTransition(async () => {
+      const response = await submitContactForm(form);
+      if (response.status === "success") {
+        setResult({ status: "success", message: response.message ?? "" });
+      } else {
+        setResult({
+          status: "error",
+          message: response.message ?? "Something went wrong, please try again.",
+        });
+      }
+    });
+  }
+
+  if (result?.status === "success") {
+    return (
+      <div className="flex items-start gap-2 rounded-xl border border-pool-blue/30 bg-pool-blue/10 p-4 text-sm text-deep-ink">
+        <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-pool-blue-dark" />
+        <p>{result.message}</p>
+      </div>
+    );
   }
 
   return (
@@ -96,13 +110,30 @@ export function ContactForm() {
         />
       </div>
 
-      <Button type="submit" size="lg">
-        <Send /> Send message by email
+      {result?.status === "error" ? (
+        <div className="flex items-start gap-2 rounded-xl bg-western-red/10 p-4 text-sm text-western-red">
+          <AlertCircle className="mt-0.5 size-4 shrink-0" />
+          <p>
+            {result.message} You can also call us on{" "}
+            <a href={siteConfig.phoneHref} className="font-semibold underline">
+              {siteConfig.phone}
+            </a>
+            .
+          </p>
+        </div>
+      ) : null}
+
+      <Button type="submit" size="lg" disabled={isPending}>
+        {isPending ? (
+          <>
+            <Loader2 className="animate-spin" /> Sending…
+          </>
+        ) : (
+          <>
+            <Send /> Send message
+          </>
+        )}
       </Button>
-      <p className="flex items-center gap-2 text-xs text-muted-foreground">
-        <Mail className="size-3.5" /> This opens your email app with the details filled in,
-        nothing is sent until you press send.
-      </p>
     </form>
   );
 }
