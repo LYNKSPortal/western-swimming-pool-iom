@@ -37,18 +37,18 @@ export function Hero() {
             with a 25m six-lane main pool, a family leisure pool, swimming lessons for every
             age, and Café West for when you&apos;re done.
           </p>
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            <Button asChild size="lg" variant="primary">
+          <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:flex-wrap sm:items-center">
+            <Button asChild size="lg" variant="primary" className="w-full sm:w-auto">
               <Link href="/swimming-lessons/register">
                 <Waves /> Sign up to lessons
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline-light">
+            <Button asChild size="lg" variant="outline-light" className="w-full sm:w-auto">
               <Link href="/timetable">
                 <CalendarDays /> View timetable
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline-light">
+            <Button asChild size="lg" variant="outline-light" className="w-full sm:w-auto">
               <a href={siteConfig.bookingPortalUrl} target="_blank" rel="noopener noreferrer">
                 <ExternalLink /> Book online
               </a>
