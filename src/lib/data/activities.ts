@@ -40,9 +40,9 @@ export const otherActivities: OtherActivity[] = [
     summary: "The first step towards competitive swimming, on the pathway to the IOM Swimming Association.",
     description: [
       "Our acclaimed club is the first step towards competitive swimming on the pathway to the Isle of Man Swimming Association.",
-      "Run by Breesha and Brian, club sessions take place on Wednesdays from 4:30pm to 6:30pm. Swimmers need to be aged 8+, able to swim two lengths, and at Stage 6 or above.",
+      "Run by Breesha and Brian, club sessions take place on Wednesdays from 4:45pm to 6:45pm. Swimmers need to be aged 8+, able to swim two lengths, and at Stage 6 or above.",
     ],
-    schedule: "Wednesdays, 4:30pm – 6:30pm",
+    schedule: "Wednesdays, 4:45pm – 6:45pm",
     prerequisites: ["Aged 8 or over", "Able to swim two lengths", "Stage 6 or above"],
     instructors: ["Breesha", "Brian"],
     image: "/images/hero-lane-dividers.jpg",
