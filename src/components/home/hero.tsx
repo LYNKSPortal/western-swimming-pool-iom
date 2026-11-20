@@ -23,8 +23,8 @@ export function Hero() {
         <div className="animate-wave absolute -bottom-10 left-0 h-32 w-[140%] bg-[radial-gradient(ellipse_at_center,_rgba(114,184,245,0.35),_transparent_70%)]" />
       </div>
 
-      <Container className="relative flex min-h-[76vh] flex-col justify-center gap-10 py-16 sm:min-h-[80vh]">
-        <Reveal className="flex max-w-3xl flex-col gap-6">
+      <Container className="relative flex min-h-[76vh] flex-col justify-center gap-10 py-20 sm:min-h-[80vh] sm:py-24">
+        <Reveal className="flex max-w-3xl flex-col gap-7">
           <span className="inline-flex w-fit items-center gap-2 rounded-full bg-heritage-yellow px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-deep-ink">
             Derby Road, Peel, Isle of Man
           </span>

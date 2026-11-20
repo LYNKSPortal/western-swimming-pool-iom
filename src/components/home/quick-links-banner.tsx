@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Container } from "@/components/shared/container";
 import { Reveal } from "@/components/shared/reveal";
 import { quickLinks } from "@/lib/data/site";
 
 export function QuickLinksBanner() {
   return (
     <section className="relative z-10 -mt-10 pb-14 sm:-mt-12 sm:pb-20">
-      <Container>
+      <div className="mx-auto w-full max-w-7xl sm:px-8 lg:px-10">
         <Reveal>
-          <div className="grid gap-3 rounded-[var(--radius-2xl)] bg-deep-ink p-4 shadow-[var(--shadow-lifted)] sm:grid-cols-2 sm:p-5 lg:grid-cols-4">
+          <div className="grid gap-3 bg-deep-ink p-4 shadow-[var(--shadow-lifted)] sm:grid-cols-2 sm:rounded-[var(--radius-2xl)] sm:p-5 lg:grid-cols-4">
             {quickLinks.map((link) => (
               <Link
                 key={link.href}
@@ -25,7 +24,7 @@ export function QuickLinksBanner() {
             ))}
           </div>
         </Reveal>
-      </Container>
+      </div>
     </section>
   );
 }
