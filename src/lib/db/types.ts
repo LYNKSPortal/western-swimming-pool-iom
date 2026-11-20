@@ -1,10 +1,3 @@
-export type LessonEnquiryChild = {
-  name: string;
-  dob: string;
-  skillLevel: string;
-  approxAgeMonths: number | null;
-};
-
 export type LessonEnquiryInput = {
   parentName: string;
   parentPhone: string;
@@ -13,10 +6,6 @@ export type LessonEnquiryInput = {
   programmeName: string;
   availability: string;
   message: string;
-  isPrivateLesson: boolean;
-  estimatedPriceGbp: number | null;
-  eligibilityConfirmed: boolean | null;
-  children: LessonEnquiryChild[];
 };
 
 export type LessonEnquiryRecord = LessonEnquiryInput & {

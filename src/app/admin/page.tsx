@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { requireAdminSession } from "@/lib/auth/dal";
 import { listLessonEnquiries } from "@/lib/db/lesson-enquiries";
+import { listTimetableSessions } from "@/lib/db/timetable";
 import { Container } from "@/components/shared/container";
 import { LogoutButton } from "@/components/admin/logout-button";
 import { AdminTabs } from "@/components/admin/admin-tabs";
-import { ScheduleCalendar } from "@/components/admin/schedule-calendar";
+import { TimetableEditor } from "@/components/admin/timetable-editor";
 import { EnquiriesList } from "@/components/admin/enquiries-list";
 
 export const metadata: Metadata = {
@@ -17,7 +18,10 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   await requireAdminSession();
-  const enquiries = await listLessonEnquiries();
+  const [enquiries, timetableSessions] = await Promise.all([
+    listLessonEnquiries(),
+    listTimetableSessions(),
+  ]);
 
   return (
     <div className="min-h-screen bg-ice-blue/30">
@@ -28,7 +32,8 @@ export default async function AdminDashboardPage() {
             <div>
               <h1 className="font-display text-lg font-bold text-deep-ink">Staff dashboard</h1>
               <p className="text-xs text-muted-foreground">
-                {enquiries.length} lesson {enquiries.length === 1 ? "enquiry" : "enquiries"} on file
+                {timetableSessions.length} timetable sessions &middot; {enquiries.length} website{" "}
+                {enquiries.length === 1 ? "sign-up" : "sign-ups"}
               </p>
             </div>
           </div>
@@ -38,8 +43,8 @@ export default async function AdminDashboardPage() {
 
       <Container className="flex flex-col gap-6 py-10">
         <AdminTabs
-          scheduleTab={<ScheduleCalendar />}
-          enquiriesTab={<EnquiriesList enquiries={enquiries} />}
+          timetableTab={<TimetableEditor sessions={timetableSessions} />}
+          signupsTab={<EnquiriesList enquiries={enquiries} />}
         />
       </Container>
     </div>

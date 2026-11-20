@@ -15,6 +15,7 @@ export const siteConfig = {
   phone: "01624 842525",
   phoneHref: "tel:01624842525",
   email: "reception@westernswimmingpool.im",
+  bookingPortalUrl: "https://westernpool.courseprogress.co.uk/onlinejoining/home",
   nscPhone: "688588",
   socials: {
     facebook: "https://www.facebook.com/westernswimmingpool",

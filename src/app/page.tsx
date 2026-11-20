@@ -9,13 +9,18 @@ import { PricingSection } from "@/components/home/pricing-section";
 import { CommunityStories } from "@/components/home/community-stories";
 import { AccessibilitySection } from "@/components/home/accessibility-section";
 import { ContactSection } from "@/components/home/contact-section";
+import { listTimetableSessions } from "@/lib/db/timetable";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const sessions = await listTimetableSessions();
+
   return (
     <>
       <Hero />
       <QuickLinksBanner />
-      <UpcomingSessions />
+      <UpcomingSessions sessions={sessions} />
       <FacilitiesIntro />
       <LessonHighlights />
       <ActivitiesSection />

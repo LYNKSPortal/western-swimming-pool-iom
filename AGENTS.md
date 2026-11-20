@@ -25,59 +25,112 @@ the `motion` animation library.
 
 ### Content & data
 
-All editorial content (prices, lesson programmes, café menu, activities, timetable,
+Most editorial content (prices, lesson programmes, café menu, activities,
 history, success stories, legal text) lives in strongly-typed modules under
-`src/lib/data/`, so it can later be swapped for a CMS/staff dashboard without
-touching components.
+`src/lib/data/`. The **public swimming timetable is the one exception**: it's
+now database-backed and editable from `/admin` (see below), not static data.
 
-- `src/lib/data/timetable.ts` — public swim timetable, sourced directly from the
-  live site's published weekly schedule, effective 2 Nov–22 Dec 2026. Re-verify and
-  update after that date.
 - Real facility photography (not AI-generated) was downloaded from the existing
   WordPress media library and lives in `public/images/`.
 
+### Architecture pivot: third-party system handles bookings
+
+Per a later client decision, **a third-party system (the existing
+`westernpool.courseprogress.co.uk` booking portal) now handles all swimming
+lesson bookings and ongoing customer management** — this app does not try to
+replace it. Concretely:
+
+- `siteConfig.bookingPortalUrl` (`src/lib/data/site.ts`) points to
+  `https://westernpool.courseprogress.co.uk/onlinejoining/home`. It's linked
+  from the Swimming Lessons page hero ("Book online") and the register page
+  ("Ready to book now?" card).
+- The website still keeps its own lightweight **sign-up form**
+  (`/swimming-lessons/register`) for brand-new interest coming through the
+  site — name, phone, email, programme, availability, message. No child DOB,
+  skill level, eligibility checklist or price calculator (that more complex
+  version was built and then deliberately removed/simplified). Submissions go
+  to our own Postgres database so staff can see them in `/admin` and follow
+  up; they do **not** go to the third-party system.
+- The admin dashboard's job is narrower than it first was: **adjusting the
+  live public timetable**, plus viewing those website sign-ups. It is not a
+  general lesson-booking/CRM tool — that's the third-party system's job.
+
 ### Database (Neon Postgres)
 
-The site is now backed by a dedicated Neon project (`western-swimming-pool`,
+The site is backed by a dedicated Neon project (`western-swimming-pool`,
 `aws-eu-central-1`), linked via `.neon` (git-ignored). `.env.local` (also
 git-ignored) holds `DATABASE_URL` / `DATABASE_URL_UNPOOLED`, pulled with
 `neon env pull` — re-run `neon link` / `neon env pull` if they go missing.
 
-- `src/lib/db/schema.sql` — schema (currently just `lesson_enquiries`). Apply
-  changes with `npm run db:migrate` (`scripts/migrate.mjs`, idempotent
-  `create table if not exists`, uses the unpooled connection for DDL).
+- `src/lib/db/schema.sql` — schema: `lesson_enquiries` (simple website
+  sign-ups) and `timetable_sessions` (the live public timetable, admin-
+  editable). Apply changes with `npm run db:migrate`
+  (`scripts/migrate.mjs`, idempotent `create table if not exists` /
+  `alter table ... drop column if exists`, uses the unpooled connection for
+  DDL).
+- `npm run db:seed-timetable` (`scripts/seed-timetable.mjs`) is a one-time
+  seed that populated `timetable_sessions` from the previously-static
+  timetable data. Safe to re-run (it clears and re-inserts every row) but
+  shouldn't normally need to be, since the admin editor is now the source of
+  truth.
 - `src/lib/db/client.ts` — `server-only` tagged-template `sql` client
   (`@neondatabase/serverless`, pooled connection). Never import it from a
   Client Component.
-- `src/lib/db/lesson-enquiries.ts` — insert/list/update-status queries.
-  `src/lib/db/types.ts` has the shared row types.
+- `src/lib/db/lesson-enquiries.ts` — insert/list/update-status queries for
+  website sign-ups. `src/lib/db/timetable.ts` — list/create/update/delete
+  queries for timetable sessions. `src/lib/db/types.ts` has the shared
+  enquiry row type; `src/lib/data/timetable.ts` has the shared
+  `PoolName`/`Weekday`/`TimetableSession` types used by both the DB layer and
+  client components.
 
 ### Forms & sensitive data
 
-- The **lesson enquiry form** (`/swimming-lessons/register`) now submits to a
-  real Server Action (`src/lib/actions/lesson-enquiry.ts` →
-  `submitLessonEnquiry`) that validates input and inserts a row into
-  `lesson_enquiries` in Postgres, including each child's date of birth and
-  self-assessed skill level (per client request — needed to route people to
-  age-appropriate programmes, e.g. Adult & Child / Parent & Toddler). It still
-  does **not** collect medical information online — mention anything relevant
-  in the free-text message field instead; that remains sensitive and is
-  deferred to a phone conversation.
+- The **sign-up form** (`/swimming-lessons/register`) submits to a Server
+  Action (`src/lib/actions/lesson-enquiry.ts` → `submitLessonEnquiry`) that
+  validates input and inserts a row into `lesson_enquiries`. It deliberately
+  does **not** collect a child's date of birth, skill level, or medical
+  information online — mention anything relevant in the free-text message
+  field instead, staff follow up by phone.
 - The **contact form** and **newsletter form** are unchanged: they still build
   a `mailto:` link / show an honest "not connected yet" message respectively,
-  rather than silently pretending to submit to a server. Only the lesson
-  enquiry form was asked to persist to the database.
+  rather than silently pretending to submit to a server.
+
+### Public timetable is now live/DB-backed, not static
+
+`/timetable`, the homepage "Next public swim sessions" section, and the admin
+editor all read from `timetable_sessions` via `src/lib/db/timetable.ts`
+(`listTimetableSessions`). Both `/` and `/timetable` are `force-dynamic` so
+admin edits show up immediately, no redeploy needed.
+
+- `src/lib/timetable-utils.ts` (`getUpcomingSessions`, `formatTime`) is now a
+  pure function that takes a flat `TimetableSession[]` as a parameter instead
+  of importing static data, so both the DB-backed server fetch and any future
+  data source can use it.
+- `src/components/timetable/timetable-interactive.tsx` and
+  `src/components/home/upcoming-sessions.tsx` (both Client Components) now
+  receive `sessions` as a prop from their parent Server Component rather than
+  importing data directly, since they can't query the database themselves.
 
 ### Staff admin dashboard (`/admin`)
 
-A minimal, real (not mocked) admin area lists incoming lesson enquiries and
-lets staff update their status (new/contacted/booked/archived):
+Two tabs:
+
+- **Timetable** (`src/components/admin/timetable-editor.tsx`) — the primary
+  purpose of the dashboard now. Add/edit/delete public swim sessions per
+  pool/day; changes write straight to `timetable_sessions` and
+  `revalidatePath` the public pages immediately. Server actions in
+  `src/lib/actions/admin-timetable.ts`.
+- **Website sign-ups** (`src/components/admin/enquiries-list.tsx`) — the
+  simple lesson sign-up submissions described above, with a status dropdown
+  (new/contacted/booked/archived).
+
+Auth (unchanged from before):
 
 - `/admin/login` — password form (`ADMIN_PASSWORD` env var, compared
-  server-side only). `/admin` — the dashboard itself.
-- Auth is a signed, stateless session cookie (JWT via `jose`, `HS256`,
-  `SESSION_SECRET` env var, 12h expiry) — see `src/lib/auth/session.ts`,
-  `src/lib/actions/admin-auth.ts` (`loginAdmin` / `logoutAdmin`).
+  server-side only). Signed, stateless session cookie (JWT via `jose`,
+  `HS256`, `SESSION_SECRET` env var, 12h expiry) — see
+  `src/lib/auth/session.ts`, `src/lib/actions/admin-auth.ts`
+  (`loginAdmin`/`logoutAdmin`).
 - `src/proxy.ts` does an **optimistic** redirect to `/admin/login` when the
   session cookie is absent (matcher: `/admin/:path*`). The real check lives in
   the Data Access Layer, `src/lib/auth/dal.ts` (`verifySession` /
@@ -93,19 +146,6 @@ lets staff update their status (new/contacted/booked/archived):
   log are ever needed, replace it with Neon Auth (Managed Better Auth) via the
   `neon-auth` skill rather than extending this by hand.
 - Required env vars (see `.env.example`): `ADMIN_PASSWORD`, `SESSION_SECRET`.
-- All "Book lessons" CTAs site-wide (header, homepage hero, swimming lessons pages)
-  point to our own `/swimming-lessons/register` enquiry form. The external
-  `westernpool.courseprogress.co.uk` portal is no longer referenced anywhere on the
-  site, per client request — the internal form is now the only booking path until a
-  secure backend replaces it.
-- `src/components/lessons/lesson-enquiry-form.tsx` is a "smart" form driven by
-  `src/lib/data/lessons.ts`: selecting a programme surfaces its real age range, pool,
-  schedule and prerequisites (as a tappable checklist); each child row captures DOB
-  (checked against the programme's `minAgeMonths`/`maxAgeMonths` guidance via
-  `src/lib/age-utils.ts`, non-blocking) and skill level
-  (`src/lib/data/skill-levels.ts`); selecting "Private Lessons" reveals a live price
-  calculator (£28 for one child + £5 per extra child, up to 3) — all of it feeds into
-  the emailed enquiry.
 
 ### Design system
 

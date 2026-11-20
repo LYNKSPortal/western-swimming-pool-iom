@@ -14,10 +14,6 @@ function mapRow(row: Record<string, unknown>): LessonEnquiryRecord {
     programmeName: row.programme_name as string,
     availability: (row.availability as string) ?? "",
     message: (row.message as string) ?? "",
-    isPrivateLesson: row.is_private_lesson as boolean,
-    estimatedPriceGbp: row.estimated_price_gbp === null ? null : Number(row.estimated_price_gbp),
-    eligibilityConfirmed: row.eligibility_confirmed as boolean | null,
-    children: row.children as LessonEnquiryRecord["children"],
   };
 }
 
@@ -26,15 +22,11 @@ export async function insertLessonEnquiry(input: LessonEnquiryInput) {
     insert into lesson_enquiries (
       parent_name, parent_phone, parent_email,
       programme_slug, programme_name,
-      availability, message,
-      is_private_lesson, estimated_price_gbp, eligibility_confirmed,
-      children
+      availability, message
     ) values (
       ${input.parentName}, ${input.parentPhone}, ${input.parentEmail},
       ${input.programmeSlug}, ${input.programmeName},
-      ${input.availability}, ${input.message},
-      ${input.isPrivateLesson}, ${input.estimatedPriceGbp}, ${input.eligibilityConfirmed},
-      ${JSON.stringify(input.children)}
+      ${input.availability}, ${input.message}
     )
     returning id, created_at
   `;

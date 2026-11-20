@@ -9,16 +9,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getUpcomingSessions, formatTime, type UpcomingSession } from "@/lib/timetable-utils";
+import type { TimetableSession } from "@/lib/data/timetable";
 
-export function UpcomingSessions() {
+export function UpcomingSessions({ sessions: allSessions }: { sessions: TimetableSession[] }) {
   const [sessions, setSessions] = useState<UpcomingSession[] | null>(null);
 
   useEffect(() => {
     // Computed on the client (not during render/SSR) because it depends on
     // the visitor's current date/time and must not cause a hydration mismatch.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSessions(getUpcomingSessions(4));
-  }, []);
+    setSessions(getUpcomingSessions(allSessions, 4));
+  }, [allSessions]);
 
   return (
     <section className="aquatic-gradient py-20 sm:py-28">

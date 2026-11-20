@@ -2,7 +2,6 @@
 
 import { insertLessonEnquiry } from "@/lib/db/lesson-enquiries";
 import { getLessonBySlug } from "@/lib/data/lessons";
-import type { LessonEnquiryChild } from "@/lib/db/types";
 
 export type SubmitLessonEnquiryState = {
   status: "idle" | "success" | "error";
@@ -20,8 +19,6 @@ export async function submitLessonEnquiry(input: {
   programmeSlug: string;
   availability: string;
   message: string;
-  eligibilityConfirmed: boolean | null;
-  children: LessonEnquiryChild[];
 }): Promise<SubmitLessonEnquiryState> {
   const parentName = input.parentName.trim();
   const parentPhone = input.parentPhone.trim();
@@ -39,24 +36,6 @@ export async function submitLessonEnquiry(input: {
     return { status: "error", message: "Please choose a valid programme." };
   }
 
-  const children = input.children
-    .filter((child) => child.dob)
-    .map((child) => ({
-      name: child.name.trim(),
-      dob: child.dob,
-      skillLevel: child.skillLevel,
-      approxAgeMonths: child.approxAgeMonths,
-    }));
-
-  if (children.length === 0) {
-    return { status: "error", message: "Please add at least one child with a date of birth." };
-  }
-
-  const isPrivateLesson = programme.slug === "private-lessons";
-  const estimatedPriceGbp = isPrivateLesson
-    ? 28 + Math.max(0, Math.min(children.length, 3) - 1) * 5
-    : null;
-
   try {
     await insertLessonEnquiry({
       parentName,
@@ -66,10 +45,6 @@ export async function submitLessonEnquiry(input: {
       programmeName: programme.name,
       availability: input.availability.trim(),
       message: input.message.trim(),
-      isPrivateLesson,
-      estimatedPriceGbp,
-      eligibilityConfirmed: input.eligibilityConfirmed,
-      children,
     });
   } catch (error) {
     console.error("Failed to save lesson enquiry", error);

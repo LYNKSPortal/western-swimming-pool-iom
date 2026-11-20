@@ -1,21 +1,15 @@
-import { Cake, Phone, Mail, Waves, Calculator } from "lucide-react";
-import { skillLevelOptions } from "@/lib/data/skill-levels";
-import { formatAge } from "@/lib/age-utils";
+import { Phone, Mail, Waves } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StatusSelect } from "@/components/admin/status-select";
 import type { LessonEnquiryRecord } from "@/lib/db/types";
 
-function skillLabel(value: string) {
-  return skillLevelOptions.find((o) => o.value === value)?.label ?? value;
-}
-
 export function EnquiriesList({ enquiries }: { enquiries: LessonEnquiryRecord[] }) {
   if (enquiries.length === 0) {
     return (
       <Card className="p-10 text-center text-muted-foreground">
-        No enquiries yet, they&apos;ll show up here as soon as someone submits the lesson
-        sign-up form.
+        No sign-ups yet, they&apos;ll show up here as soon as someone submits the form on the
+        website.
       </Card>
     );
   }
@@ -54,27 +48,6 @@ export function EnquiriesList({ enquiries }: { enquiries: LessonEnquiryRecord[] 
               <Waves className="size-3" /> {enquiry.programmeName}
             </Badge>
             {enquiry.availability ? <Badge variant="outline">{enquiry.availability}</Badge> : null}
-            {enquiry.isPrivateLesson && enquiry.estimatedPriceGbp !== null ? (
-              <Badge variant="yellow" className="gap-1">
-                <Calculator className="size-3" /> £{enquiry.estimatedPriceGbp.toFixed(2)}
-              </Badge>
-            ) : null}
-            {enquiry.eligibilityConfirmed === false ? (
-              <Badge variant="red">Eligibility not fully confirmed</Badge>
-            ) : null}
-          </div>
-
-          <div className="grid gap-2 border-t border-border pt-4 sm:grid-cols-2">
-            {enquiry.children.map((child, i) => (
-              <div key={i} className="flex flex-col gap-1 rounded-xl bg-ice-blue/50 px-4 py-3 text-sm">
-                <span className="font-semibold text-deep-ink">{child.name || `Child ${i + 1}`}</span>
-                <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Cake className="size-3.5" /> {child.dob}
-                  {child.approxAgeMonths !== null ? ` (approx. ${formatAge(child.approxAgeMonths)})` : ""}
-                </span>
-                <span className="text-xs text-muted-foreground">{skillLabel(child.skillLevel)}</span>
-              </div>
-            ))}
           </div>
 
           {enquiry.message ? (

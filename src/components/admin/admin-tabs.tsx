@@ -4,20 +4,20 @@ import type { ReactNode } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function AdminTabs({
-  scheduleTab,
-  enquiriesTab,
+  timetableTab,
+  signupsTab,
 }: {
-  scheduleTab: ReactNode;
-  enquiriesTab: ReactNode;
+  timetableTab: ReactNode;
+  signupsTab: ReactNode;
 }) {
   return (
-    <Tabs defaultValue="schedule">
+    <Tabs defaultValue="timetable">
       <TabsList>
-        <TabsTrigger value="schedule">Schedule</TabsTrigger>
-        <TabsTrigger value="enquiries">Lesson enquiries</TabsTrigger>
+        <TabsTrigger value="timetable">Timetable</TabsTrigger>
+        <TabsTrigger value="signups">Website sign-ups</TabsTrigger>
       </TabsList>
-      <TabsContent value="schedule">{scheduleTab}</TabsContent>
-      <TabsContent value="enquiries">{enquiriesTab}</TabsContent>
+      <TabsContent value="timetable">{timetableTab}</TabsContent>
+      <TabsContent value="signups">{signupsTab}</TabsContent>
     </Tabs>
   );
 }

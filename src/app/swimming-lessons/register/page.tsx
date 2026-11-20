@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { Phone } from "lucide-react";
+import { Phone, ExternalLink } from "lucide-react";
 import { PageHero } from "@/components/shared/page-hero";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { Container } from "@/components/shared/container";
@@ -12,7 +11,7 @@ import { siteConfig } from "@/lib/data/site";
 export const metadata: Metadata = {
   title: "Sign Up to Swimming Lessons",
   description:
-    "Sign up or enquire about swimming lessons at Western Swimming Pool using our interactive programme-aware enquiry form.",
+    "Sign up for swimming lessons at Western Swimming Pool, or book directly through our online booking portal.",
 };
 
 export default function RegisterPage() {
@@ -21,7 +20,7 @@ export default function RegisterPage() {
       <PageHero
         eyebrow="Sign up to lessons"
         title="Let's get your family in the water"
-        description="Pick a programme and fill in a quick enquiry, our form shows the age range, eligibility and pricing as you go. Our team will call you back to confirm and complete registration."
+        description="Let us know you're interested and we'll call you back, or book directly online if you're ready to go."
         image="/images/leisure-pool-3.jpg"
         imageAlt="Western swimming pool's little pool"
       />
@@ -32,7 +31,20 @@ export default function RegisterPage() {
           <LessonEnquiryForm />
         </div>
 
-        <div className="mx-auto grid w-full max-w-3xl gap-6 sm:grid-cols-2 sm:items-stretch">
+        <div className="mx-auto grid w-full max-w-3xl gap-6 sm:grid-cols-2">
+          <Card className="flex flex-col gap-4 p-7">
+            <h2 className="font-display text-xl font-bold text-deep-ink">Ready to book now?</h2>
+            <p className="text-sm text-muted-foreground">
+              Existing and new customers can book lessons directly through our online booking
+              portal.
+            </p>
+            <Button asChild size="lg" className="mt-auto w-fit">
+              <a href={siteConfig.bookingPortalUrl} target="_blank" rel="noopener noreferrer">
+                Book online <ExternalLink />
+              </a>
+            </Button>
+          </Card>
+
           <Card className="flex flex-col gap-4 p-7">
             <h2 className="font-display text-xl font-bold text-deep-ink">Prefer to call?</h2>
             <p className="text-sm text-muted-foreground">
@@ -45,16 +57,6 @@ export default function RegisterPage() {
               </a>
             </Button>
           </Card>
-
-          <div className="relative min-h-[200px] overflow-hidden rounded-[var(--radius-2xl)]">
-            <Image
-              src="/images/accessible-hoist.jpg"
-              alt="Accessible pool hoist at Western Swimming Pool"
-              fill
-              sizes="(min-width: 640px) 35vw, 90vw"
-              className="object-cover"
-            />
-          </div>
         </div>
       </Container>
     </>

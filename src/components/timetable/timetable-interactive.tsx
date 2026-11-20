@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Waves, Clock, AlertTriangle } from "lucide-react";
+import { Waves, Clock } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { timetable, weekdays, type PoolName, type Weekday } from "@/lib/data/timetable";
+import { weekdays, type PoolName, type Weekday, type TimetableSession } from "@/lib/data/timetable";
 import { formatTime } from "@/lib/timetable-utils";
 
 function useTodayIndex() {
@@ -15,11 +15,10 @@ function useTodayIndex() {
   }, []);
 }
 
-function PoolSchedule({ pool }: { pool: PoolName }) {
+function PoolSchedule({ pool, sessions }: { pool: PoolName; sessions: TimetableSession[] }) {
   const todayIndex = useTodayIndex();
   const [activeDay, setActiveDay] = useState<Weekday>(weekdays[todayIndex]);
-  const poolTimetable = timetable.find((t) => t.pool === pool);
-  const daySchedule = poolTimetable?.days.find((d) => d.day === activeDay);
+  const daySessions = sessions.filter((s) => s.pool === pool && s.day === activeDay);
 
   return (
     <div className="flex flex-col gap-6">
@@ -53,17 +52,10 @@ function PoolSchedule({ pool }: { pool: PoolName }) {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {daySchedule && daySchedule.sessions.length > 0 ? (
-          daySchedule.sessions.map((session, i) => (
-            <Card key={i} className="flex flex-col gap-3 p-5">
-              <div className="flex items-center justify-between">
-                <Badge variant={pool === "Main Pool" ? "red" : "blue"}>{pool}</Badge>
-                {session.needsConfirmation ? (
-                  <Badge variant="outline" className="gap-1">
-                    <AlertTriangle className="size-3" /> Confirm
-                  </Badge>
-                ) : null}
-              </div>
+        {daySessions.length > 0 ? (
+          daySessions.map((session) => (
+            <Card key={session.id} className="flex flex-col gap-3 p-5">
+              <Badge variant={pool === "Main Pool" ? "red" : "blue"}>{pool}</Badge>
               <div className="flex items-center gap-2 font-display text-lg font-bold text-deep-ink">
                 <Waves className="size-5 text-pool-blue-dark" /> {session.label}
               </div>
@@ -88,7 +80,7 @@ function PoolSchedule({ pool }: { pool: PoolName }) {
   );
 }
 
-export function TimetableInteractive() {
+export function TimetableInteractive({ sessions }: { sessions: TimetableSession[] }) {
   return (
     <Tabs defaultValue="Main Pool">
       <TabsList>
@@ -96,10 +88,10 @@ export function TimetableInteractive() {
         <TabsTrigger value="Leisure Pool">Leisure Pool</TabsTrigger>
       </TabsList>
       <TabsContent value="Main Pool">
-        <PoolSchedule pool="Main Pool" />
+        <PoolSchedule pool="Main Pool" sessions={sessions} />
       </TabsContent>
       <TabsContent value="Leisure Pool">
-        <PoolSchedule pool="Leisure Pool" />
+        <PoolSchedule pool="Leisure Pool" sessions={sessions} />
       </TabsContent>
     </Tabs>
   );

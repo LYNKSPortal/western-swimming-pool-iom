@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { LessonFinder } from "@/components/lessons/lesson-finder";
 import { lessonProgrammes, progressionPathway } from "@/lib/data/lessons";
 import { successStories } from "@/lib/data/stories";
+import { siteConfig } from "@/lib/data/site";
 
 export const metadata: Metadata = {
   title: "Swimming Lessons",
@@ -33,6 +34,11 @@ export default function SwimmingLessonsPage() {
         <div className="flex flex-wrap gap-3 pt-2">
           <Button asChild size="lg" variant="primary">
             <Link href="/swimming-lessons/register">Sign up to lessons</Link>
+          </Button>
+          <Button asChild size="lg" variant="outline-light">
+            <a href={siteConfig.bookingPortalUrl} target="_blank" rel="noopener noreferrer">
+              Book online
+            </a>
           </Button>
         </div>
       </PageHero>
