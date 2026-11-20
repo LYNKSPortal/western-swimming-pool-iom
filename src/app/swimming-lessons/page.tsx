@@ -74,6 +74,7 @@ export default function SwimmingLessonsPage() {
             eyebrow="Programmes"
             eyebrowVariant="blue"
             title="Every stage of the swimming journey"
+            align="center-mobile"
           />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {sorted.map((lesson) => (

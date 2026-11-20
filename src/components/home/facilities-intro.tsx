@@ -49,7 +49,7 @@ export function FacilitiesIntro() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-2">
+            <ul className="grid grid-cols-1 gap-3">
               {facilities.map(({ icon: Icon, label }) => (
                 <li
                   key={label}

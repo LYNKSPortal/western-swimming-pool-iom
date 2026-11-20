@@ -21,13 +21,13 @@ export function CommunityStories() {
         <div className="grid gap-6 sm:grid-cols-2">
           {successStories.map((story, i) => (
             <Reveal key={story.slug} delay={i * 0.08}>
-              <Card className="grid h-full grid-cols-[auto_1fr] gap-5 p-6 sm:grid-cols-1">
-                <div className="relative size-24 overflow-hidden rounded-2xl sm:size-full sm:aspect-[16/9]">
+              <Card className="flex h-full flex-col gap-5 p-6">
+                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
                   <Image
                     src={story.image}
                     alt={story.imageAlt}
                     fill
-                    sizes="(min-width: 640px) 45vw, 96px"
+                    sizes="(min-width: 640px) 45vw, 90vw"
                     className="object-cover"
                   />
                 </div>

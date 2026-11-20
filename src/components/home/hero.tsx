@@ -24,7 +24,7 @@ export function Hero() {
       </div>
 
       <Container className="relative flex min-h-[76vh] flex-col justify-center gap-10 py-20 sm:min-h-[80vh] sm:py-24">
-        <Reveal className="flex max-w-3xl flex-col gap-7">
+        <Reveal className="flex max-w-3xl flex-col items-center gap-7 text-center sm:items-start sm:text-left">
           <span className="inline-flex w-fit items-center gap-2 rounded-full bg-heritage-yellow px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-deep-ink">
             Derby Road, Peel, Isle of Man
           </span>

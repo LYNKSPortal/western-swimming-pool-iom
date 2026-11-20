@@ -68,6 +68,7 @@ export default function CafePage() {
             eyebrow="Menu"
             eyebrowVariant="red"
             title="Snacks, cakes and drinks served all day"
+            align="center-mobile"
           />
           <MenuTabs />
         </section>

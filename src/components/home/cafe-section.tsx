@@ -32,7 +32,7 @@ export function CafeSection() {
             jacket potatoes, hot drinks and homemade cakes with ringside views over the Main Pool.
             Outside, our state-of-the-art playground keeps little ones entertained for hours.
           </p>
-          <div className="flex flex-wrap gap-4 text-sm font-semibold text-white/85">
+          <div className="flex flex-col gap-3 text-sm font-semibold text-white/85 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
             <span className="flex items-center gap-2"><Wifi className="size-4 text-pool-blue" /> Free Wi-Fi</span>
             <span className="flex items-center gap-2"><Car className="size-4 text-pool-blue" /> Free parking</span>
             <span className="flex items-center gap-2"><Baby className="size-4 text-pool-blue" /> Outdoor playground</span>

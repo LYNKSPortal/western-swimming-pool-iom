@@ -7,7 +7,11 @@ type SectionHeadingProps = {
   eyebrowVariant?: BadgeProps["variant"];
   title: string;
   description?: string;
-  align?: "left" | "center";
+  /**
+   * "center-mobile" centers the heading on small screens and reverts to
+   * left-aligned from the sm: breakpoint up.
+   */
+  align?: "left" | "center" | "center-mobile";
   className?: string;
 };
 
@@ -19,16 +23,30 @@ export function SectionHeading({
   align = "left",
   className,
 }: SectionHeadingProps) {
+  const centered = align === "center" || align === "center-mobile";
+  const mobileOnly = align === "center-mobile";
+
   return (
     <div
       className={cn(
         "flex max-w-2xl flex-col gap-4",
         align === "center" && "mx-auto items-center text-center",
+        mobileOnly && "items-center text-center sm:items-start sm:text-left",
         className
       )}
     >
       {eyebrow ? (
-        <Badge variant={eyebrowVariant} className="w-fit self-start">
+        <Badge
+          variant={eyebrowVariant}
+          className={cn(
+            "w-fit",
+            mobileOnly
+              ? "self-center sm:self-start"
+              : centered
+                ? "self-center"
+                : "self-start"
+          )}
+        >
           {eyebrow}
         </Badge>
       ) : null}

@@ -33,23 +33,31 @@ export default async function TimetablePage() {
       <Breadcrumbs items={[{ label: "Timetable" }]} />
 
       <Container className="flex flex-col gap-10 py-16">
-        <div className="flex flex-col gap-3 rounded-2xl border border-heritage-yellow/50 bg-heritage-yellow/15 p-5 text-sm text-deep-ink sm:flex-row sm:items-start">
-          <AlertTriangle className="mt-0.5 size-5 shrink-0 text-western-red" />
-          <ul className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-4 rounded-2xl border border-heritage-yellow/50 bg-heritage-yellow/15 p-5 text-sm text-deep-ink sm:flex-row sm:items-start sm:gap-3">
+          <div className="flex items-center gap-2 sm:flex-col sm:items-start sm:gap-0">
+            <AlertTriangle className="size-5 shrink-0 text-western-red" />
+            <span className="font-bold uppercase tracking-wide text-xs text-western-red sm:hidden">
+              Good to know
+            </span>
+          </div>
+          <ul className="flex flex-col gap-2.5">
             {timetableNotices.map((notice) => (
-              <li key={notice.text}>
-                {notice.href ? (
-                  <a
-                    href={notice.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-2 hover:text-western-red"
-                  >
-                    {notice.text}
-                  </a>
-                ) : (
-                  notice.text
-                )}
+              <li key={notice.text} className="flex items-start gap-2.5">
+                <span className="mt-2 size-1.5 shrink-0 rounded-full bg-western-red/60" aria-hidden />
+                <span>
+                  {notice.href ? (
+                    <a
+                      href={notice.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-2 hover:text-western-red"
+                    >
+                      {notice.text}
+                    </a>
+                  ) : (
+                    notice.text
+                  )}
+                </span>
               </li>
             ))}
           </ul>

@@ -58,7 +58,7 @@ export default function AboutPage() {
           <div className="grid gap-6 sm:grid-cols-2">
             {facilityPoints.map(({ icon: Icon, title, text }) => (
               <div key={title} className="flex flex-col gap-3 rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-soft)]">
-                <Icon className="size-6 text-western-red" />
+                <Icon className="size-10 text-western-red" />
                 <h3 className="font-display text-lg font-bold text-deep-ink">{title}</h3>
                 <p className="text-sm leading-relaxed text-muted-foreground">{text}</p>
               </div>
