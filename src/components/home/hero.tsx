@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, Waves } from "lucide-react";
+import { CalendarDays, ExternalLink, Waves } from "lucide-react";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/shared/reveal";
@@ -47,6 +47,11 @@ export function Hero() {
               <Link href="/timetable">
                 <CalendarDays /> View timetable
               </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline-light">
+              <a href={siteConfig.bookingPortalUrl} target="_blank" rel="noopener noreferrer">
+                <ExternalLink /> Book online
+              </a>
             </Button>
           </div>
         </Reveal>
