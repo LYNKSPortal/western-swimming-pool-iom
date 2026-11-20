@@ -1,12 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, HeartPulse, Trophy, Waves, type LucideIcon } from "lucide-react";
 import { Container } from "@/components/shared/container";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Reveal } from "@/components/shared/reveal";
 import { otherActivities } from "@/lib/data/activities";
+
+const activityIcons: Record<string, LucideIcon> = {
+  aquafit: Waves,
+  "silver-club": HeartPulse,
+  "peel-swimming-club": Trophy,
+};
 
 const featured = otherActivities.filter((a) =>
   ["aquafit", "silver-club", "peel-swimming-club"].includes(a.slug)
@@ -39,25 +45,31 @@ export function ActivitiesSection() {
           </Button>
         </Reveal>
 
-        <div className="grid gap-5 sm:grid-cols-2">
-          {featured.map((activity, i) => (
-            <Reveal
-              key={activity.slug}
-              delay={i * 0.06}
-              className={i === featured.length - 1 && featured.length % 2 === 1 ? "sm:col-span-2" : undefined}
-            >
-              <Card className="flex h-full flex-col gap-3 p-6">
-                <h3 className="font-display text-xl font-bold text-deep-ink">{activity.name}</h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">{activity.summary}</p>
-                {activity.schedule ? (
-                  <p className="text-xs font-bold uppercase tracking-wide text-western-red">
-                    {activity.schedule}
-                  </p>
-                ) : null}
-              </Card>
-            </Reveal>
-          ))}
-        </div>
+        <Card className="flex flex-col divide-y divide-border overflow-hidden p-0">
+          {featured.map((activity, i) => {
+            const Icon = activityIcons[activity.slug] ?? Waves;
+            return (
+              <Reveal
+                key={activity.slug}
+                delay={i * 0.06}
+                className="flex items-start gap-4 p-6"
+              >
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-landscape-green/10 text-landscape-green">
+                  <Icon className="size-6" />
+                </span>
+                <div className="flex flex-col gap-1.5">
+                  <h3 className="font-display text-lg font-bold text-deep-ink">{activity.name}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{activity.summary}</p>
+                  {activity.schedule ? (
+                    <p className="text-xs font-bold uppercase tracking-wide text-western-red">
+                      {activity.schedule}
+                    </p>
+                  ) : null}
+                </div>
+              </Reveal>
+            );
+          })}
+        </Card>
       </Container>
     </section>
   );
