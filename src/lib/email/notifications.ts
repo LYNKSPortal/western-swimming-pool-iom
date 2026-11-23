@@ -1,6 +1,21 @@
 import "server-only";
 import { emailFrom, notificationsEmail, resend } from "@/lib/email/client";
 import { renderBadge, renderEmail, renderFieldRows } from "@/lib/email/template";
+import { skillLevelOptions } from "@/lib/data/skill-levels";
+import type { ChildInput } from "@/lib/actions/lesson-enquiry";
+
+function formatChildren(children: ChildInput[]) {
+  if (children.length === 0) return "";
+  return children
+    .map((child, i) => {
+      const skillLabel = skillLevelOptions.find((s) => s.value === child.skillLevel)?.label;
+      const details = [child.age ? `age ${child.age}` : null, skillLabel]
+        .filter(Boolean)
+        .join(", ");
+      return `${i + 1}. ${child.name}${details ? ` (${details})` : ""}`;
+    })
+    .join("\n");
+}
 
 /**
  * Sends a best-effort staff notification email. Failures are logged, not
@@ -68,6 +83,7 @@ export function sendLessonEnquiryNotification(input: {
   programmeName: string;
   availability: string;
   message: string;
+  children: ChildInput[];
 }) {
   const subject = `New lesson sign-up: ${input.programmeName}`;
   const html = renderEmail({
@@ -79,6 +95,7 @@ export function sendLessonEnquiryNotification(input: {
         ["Parent/guardian", input.parentName],
         ["Phone", input.parentPhone],
         ["Email", input.parentEmail],
+        ["Children", formatChildren(input.children)],
         ["Availability", input.availability],
         ["Message", input.message],
       ])}

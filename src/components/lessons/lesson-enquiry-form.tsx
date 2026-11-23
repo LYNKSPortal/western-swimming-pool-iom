@@ -1,7 +1,18 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { ShieldCheck, Clock, Waves, Loader2, PartyPopper, Phone, AlertCircle, Send } from "lucide-react";
+import {
+  ShieldCheck,
+  Clock,
+  Waves,
+  Loader2,
+  PartyPopper,
+  Phone,
+  AlertCircle,
+  Send,
+  Plus,
+  X,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,7 +22,12 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { lessonProgrammes } from "@/lib/data/lessons";
 import { siteConfig } from "@/lib/data/site";
-import { submitLessonEnquiry } from "@/lib/actions/lesson-enquiry";
+import { skillLevelOptions } from "@/lib/data/skill-levels";
+import { submitLessonEnquiry, type ChildInput } from "@/lib/actions/lesson-enquiry";
+
+function emptyChild(): ChildInput {
+  return { name: "", age: "", skillLevel: skillLevelOptions[0].value };
+}
 
 export function LessonEnquiryForm() {
   const [form, setForm] = useState({
@@ -22,12 +38,25 @@ export function LessonEnquiryForm() {
     availability: "",
     message: "",
   });
+  const [children, setChildren] = useState<ChildInput[]>([emptyChild()]);
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<{ status: "success" | "error"; message: string } | null>(
     null
   );
 
   const programme = lessonProgrammes.find((l) => l.slug === form.programme);
+
+  function updateChild(index: number, patch: Partial<ChildInput>) {
+    setChildren((prev) => prev.map((child, i) => (i === index ? { ...child, ...patch } : child)));
+  }
+
+  function addChild() {
+    setChildren((prev) => [...prev, emptyChild()]);
+  }
+
+  function removeChild(index: number) {
+    setChildren((prev) => prev.filter((_, i) => i !== index));
+  }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -40,6 +69,7 @@ export function LessonEnquiryForm() {
       programmeSlug: form.programme,
       availability: form.availability,
       message: form.message,
+      children,
     };
 
     startTransition(async () => {
@@ -146,6 +176,73 @@ export function LessonEnquiryForm() {
             ) : null}
           </div>
         ) : null}
+
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <Label>Child&apos;s details</Label>
+            <Button type="button" size="sm" variant="outline" onClick={addChild}>
+              <Plus className="size-3.5" /> Add another child
+            </Button>
+          </div>
+          {children.map((child, index) => (
+            <div
+              key={index}
+              className="grid gap-3 rounded-2xl border border-border bg-ice-blue/30 p-4 sm:grid-cols-[1.4fr_0.8fr_1fr_auto]"
+            >
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor={`child-name-${index}`} className="text-xs">
+                  Name
+                </Label>
+                <Input
+                  id={`child-name-${index}`}
+                  required
+                  value={child.name}
+                  onChange={(e) => updateChild(index, { name: e.target.value })}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor={`child-age-${index}`} className="text-xs">
+                  Age
+                </Label>
+                <Input
+                  id={`child-age-${index}`}
+                  inputMode="numeric"
+                  placeholder="e.g. 7"
+                  value={child.age}
+                  onChange={(e) => updateChild(index, { age: e.target.value })}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor={`child-skill-${index}`} className="text-xs">
+                  Swimming ability
+                </Label>
+                <Select
+                  id={`child-skill-${index}`}
+                  value={child.skillLevel}
+                  onChange={(e) => updateChild(index, { skillLevel: e.target.value })}
+                >
+                  {skillLevelOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+              <div className="flex items-end justify-end">
+                {children.length > 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => removeChild(index)}
+                    aria-label="Remove child"
+                    className="flex size-9 items-center justify-center rounded-full text-deep-ink/50 hover:bg-white hover:text-western-red"
+                  >
+                    <X className="size-4" />
+                  </button>
+                ) : null}
+              </div>
+            </div>
+          ))}
+        </div>
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="availability">Preferred days / times</Label>

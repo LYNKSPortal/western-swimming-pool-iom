@@ -13,6 +13,16 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+export type ChildInput = {
+  name: string;
+  age: string;
+  skillLevel: string;
+};
+
+// Per-child details are included in the staff notification email only, not
+// persisted to lesson_enquiries (no medical information is collected here,
+// by design, same as the rest of this form).
+
 export async function submitLessonEnquiry(input: {
   parentName: string;
   parentPhone: string;
@@ -20,6 +30,7 @@ export async function submitLessonEnquiry(input: {
   programmeSlug: string;
   availability: string;
   message: string;
+  children: ChildInput[];
 }): Promise<SubmitLessonEnquiryState> {
   const parentName = input.parentName.trim();
   const parentPhone = input.parentPhone.trim();
@@ -39,6 +50,13 @@ export async function submitLessonEnquiry(input: {
 
   const availability = input.availability.trim();
   const message = input.message.trim();
+  const children = input.children
+    .map((child) => ({
+      name: child.name.trim(),
+      age: child.age.trim(),
+      skillLevel: child.skillLevel,
+    }))
+    .filter((child) => child.name.length > 0);
 
   try {
     await insertLessonEnquiry({
@@ -65,6 +83,7 @@ export async function submitLessonEnquiry(input: {
     programmeName: programme.name,
     availability,
     message,
+    children,
   });
 
   return { status: "success", message: "Thanks! Your enquiry has been sent to our team." };
