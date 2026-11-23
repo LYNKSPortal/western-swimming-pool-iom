@@ -1,6 +1,6 @@
 import "server-only";
 import { emailFrom, notificationsEmail, resend } from "@/lib/email/client";
-import { renderBadge, renderEmail, renderFieldRows } from "@/lib/email/template";
+import { escapeHtml, renderBadge, renderEmail, renderFieldRows } from "@/lib/email/template";
 import { skillLevelOptions } from "@/lib/data/skill-levels";
 import type { ChildInput } from "@/lib/actions/lesson-enquiry";
 
@@ -26,13 +26,15 @@ function formatChildren(children: ChildInput[]) {
 /**
  * Sends a best-effort staff notification email. Failures are logged, not
  * thrown, so a Resend outage never blocks a form submission that already
- * saved (or doesn't need to save) to the database.
+ * saved (or doesn't need to save) to the database. replyTo is set to the
+ * submitter's email so staff can simply reply to the notification.
  */
-async function sendNotification(subject: string, html: string) {
+async function sendNotification(subject: string, html: string, replyTo?: string) {
   try {
     await resend.emails.send({
       from: emailFrom,
       to: notificationsEmail,
+      replyTo,
       subject,
       html,
     });
@@ -41,7 +43,34 @@ async function sendNotification(subject: string, html: string) {
   }
 }
 
-export function sendContactFormNotification(input: {
+/**
+ * Sends a best-effort branded confirmation email to the person who
+ * submitted a form. It comes from reception@ so they can just hit reply
+ * to talk to the team.
+ */
+async function sendCustomerConfirmation(
+  to: string,
+  input: { subject: string; preheader: string; heading: string; bodyHtml: string }
+) {
+  if (!to) return;
+  try {
+    await resend.emails.send({
+      from: emailFrom,
+      to,
+      replyTo: notificationsEmail,
+      subject: input.subject,
+      html: renderEmail({
+        preheader: input.preheader,
+        heading: input.heading,
+        bodyHtml: input.bodyHtml,
+      }),
+    });
+  } catch (error) {
+    console.error(`Failed to send confirmation email: ${input.subject}`, error);
+  }
+}
+
+export async function sendContactFormNotification(input: {
   name: string;
   email: string;
   phone: string;
@@ -62,10 +91,22 @@ export function sendContactFormNotification(input: {
       ])}
     `,
   });
-  return sendNotification(subject, html);
+
+  const confirmation = sendCustomerConfirmation(input.email, {
+    subject: "Thanks for getting in touch",
+    preheader: "We've received your message and will be in touch soon",
+    heading: "Thanks for getting in touch",
+    bodyHtml: `
+      <p style="margin:0 0 12px;">Hi ${escapeHtml(input.name)},</p>
+      <p style="margin:0 0 12px;">Thanks for your message &mdash; it&apos;s landed safely with our reception team and we&apos;ll be in touch soon.</p>
+      <p style="margin:0;">If anything changes or you want to add more detail, just reply to this email and it will come straight through to us.</p>
+    `,
+  });
+
+  await Promise.all([confirmation, sendNotification(subject, html, input.email)]);
 }
 
-export function sendNewsletterSignupNotification(input: {
+export async function sendNewsletterSignupNotification(input: {
   firstName: string;
   lastName: string;
   email: string;
@@ -79,10 +120,22 @@ export function sendNewsletterSignupNotification(input: {
       ["Email", input.email],
     ]),
   });
-  return sendNotification("New newsletter sign-up", html);
+
+  const confirmation = sendCustomerConfirmation(input.email, {
+    subject: "You're on the list",
+    preheader: "Thanks for subscribing to the Western Swimming Pool newsletter",
+    heading: "You're on the list",
+    bodyHtml: `
+      <p style="margin:0 0 12px;">Hi ${escapeHtml(input.firstName)},</p>
+      <p style="margin:0 0 12px;">Thanks for signing up for the latest news from Western Swimming Pool &mdash; we&apos;ll keep you posted on timetables, lessons and what&apos;s on.</p>
+      <p style="margin:0;">If you ever need anything, just reply to this email and it will come straight through to our reception team.</p>
+    `,
+  });
+
+  await Promise.all([confirmation, sendNotification("New newsletter sign-up", html, input.email)]);
 }
 
-export function sendLessonEnquiryNotification(input: {
+export async function sendLessonEnquiryNotification(input: {
   parentName: string;
   parentPhone: string;
   parentEmail: string;
@@ -107,5 +160,22 @@ export function sendLessonEnquiryNotification(input: {
       ])}
     `,
   });
-  return sendNotification(subject, html);
+
+  const confirmation = sendCustomerConfirmation(input.parentEmail, {
+    subject: `Thanks for signing up for ${input.programmeName}`,
+    preheader: "We've received your lesson enquiry and will call you back soon",
+    heading: "Thanks for signing up",
+    bodyHtml: `
+      <p style="margin:0 0 12px;">Hi ${escapeHtml(input.parentName)},</p>
+      <p style="margin:0 0 12px;">Thanks for your interest in <strong>${escapeHtml(input.programmeName)}</strong> &mdash; our team has your enquiry and will call you back to talk through availability and get you booked in.</p>
+      ${renderFieldRows([
+        ["Programme", input.programmeName],
+        ["Children", formatChildren(input.children)],
+        ["Your availability", input.availability],
+      ])}
+      <p style="margin:12px 0 0;">If anything changes or you want to add more detail, just reply to this email and it will come straight through to our reception team.</p>
+    `,
+  });
+
+  await Promise.all([confirmation, sendNotification(subject, html, input.parentEmail)]);
 }
