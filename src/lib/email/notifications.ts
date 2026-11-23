@@ -12,7 +12,13 @@ function formatChildren(children: ChildInput[]) {
       const details = [child.age ? `age ${child.age}` : null, skillLabel]
         .filter(Boolean)
         .join(", ");
-      return `${i + 1}. ${child.name}${details ? ` (${details})` : ""}`;
+      const extra = [
+        child.lessonPreference ? `   - Lesson preference: ${child.lessonPreference}` : null,
+        child.supportNeeds ? `   - Support needs: ${child.supportNeeds}` : null,
+      ]
+        .filter(Boolean)
+        .join("\n");
+      return `${i + 1}. ${child.name}${details ? ` (${details})` : ""}${extra ? `\n${extra}` : ""}`;
     })
     .join("\n");
 }

@@ -17,6 +17,8 @@ export type ChildInput = {
   name: string;
   age: string;
   skillLevel: string;
+  supportNeeds?: string;
+  lessonPreference?: string;
 };
 
 // Per-child details are included in the staff notification email only, not
@@ -55,6 +57,8 @@ export async function submitLessonEnquiry(input: {
       name: child.name.trim(),
       age: child.age.trim(),
       skillLevel: child.skillLevel,
+      supportNeeds: (child.supportNeeds ?? "").trim(),
+      lessonPreference: child.lessonPreference ?? "",
     }))
     .filter((child) => child.name.length > 0);
 

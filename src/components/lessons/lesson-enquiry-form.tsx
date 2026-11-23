@@ -25,8 +25,20 @@ import { siteConfig } from "@/lib/data/site";
 import { skillLevelOptions } from "@/lib/data/skill-levels";
 import { submitLessonEnquiry, type ChildInput } from "@/lib/actions/lesson-enquiry";
 
+const lessonPreferenceOptions = [
+  { value: "not-sure", label: "Not sure, happy to talk it through" },
+  { value: "mainstream-group", label: "Mainstream group lesson" },
+  { value: "one-to-one", label: "One-to-one lesson" },
+];
+
 function emptyChild(): ChildInput {
-  return { name: "", age: "", skillLevel: skillLevelOptions[0].value };
+  return {
+    name: "",
+    age: "",
+    skillLevel: skillLevelOptions[0].value,
+    supportNeeds: "",
+    lessonPreference: lessonPreferenceOptions[0].value,
+  };
 }
 
 export function LessonEnquiryForm() {
@@ -46,6 +58,7 @@ export function LessonEnquiryForm() {
 
   const programme = lessonProgrammes.find((l) => l.slug === form.programme);
   const isAdultOnly = programme ? programme.ageGroups.every((g) => g === "adult") : false;
+  const isSpecialNeeds = form.programme === "special-needs-support";
 
   function updateChild(index: number, patch: Partial<ChildInput>) {
     setChildren((prev) => prev.map((child, i) => (i === index ? { ...child, ...patch } : child)));
@@ -186,6 +199,14 @@ export function LessonEnquiryForm() {
               <Plus className="size-3.5" /> Add another child
             </Button>
           </div>
+          {isSpecialNeeds ? (
+            <p className="rounded-xl bg-ice-blue/40 p-3 text-xs text-muted-foreground">
+              We know we&apos;re asking a little more than usual here &mdash; these extra questions
+              simply help us make sure we can fully accommodate your child, so they get the best
+              possible experience in the water. Nothing here is compulsory and there are no wrong
+              answers.
+            </p>
+          ) : null}
           {children.map((child, index) => (
             <div
               key={index}
@@ -230,6 +251,38 @@ export function LessonEnquiryForm() {
                   ))}
                 </Select>
               </div>
+              {isSpecialNeeds ? (
+                <>
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor={`child-preference-${index}`} className="text-xs">
+                      Lesson format that might suit them best
+                    </Label>
+                    <Select
+                      id={`child-preference-${index}`}
+                      value={child.lessonPreference}
+                      onChange={(e) => updateChild(index, { lessonPreference: e.target.value })}
+                    >
+                      {lessonPreferenceOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor={`child-support-${index}`} className="text-xs">
+                      Anything that would help us support them?{" "}
+                      <span className="text-muted-foreground">(optional)</span>
+                    </Label>
+                    <Textarea
+                      id={`child-support-${index}`}
+                      placeholder="E.g. how they communicate best, mobility or sensory needs, what helps them feel comfortable"
+                      value={child.supportNeeds}
+                      onChange={(e) => updateChild(index, { supportNeeds: e.target.value })}
+                    />
+                  </div>
+                </>
+              ) : null}
               <div className="flex items-end justify-end">
                 {children.length > 1 ? (
                   <button
