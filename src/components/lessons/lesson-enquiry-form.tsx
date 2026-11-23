@@ -45,6 +45,7 @@ export function LessonEnquiryForm() {
   );
 
   const programme = lessonProgrammes.find((l) => l.slug === form.programme);
+  const isAdultOnly = programme ? programme.ageGroups.every((g) => g === "adult") : false;
 
   function updateChild(index: number, patch: Partial<ChildInput>) {
     setChildren((prev) => prev.map((child, i) => (i === index ? { ...child, ...patch } : child)));
@@ -69,7 +70,7 @@ export function LessonEnquiryForm() {
       programmeSlug: form.programme,
       availability: form.availability,
       message: form.message,
-      children,
+      children: isAdultOnly ? [] : children,
     };
 
     startTransition(async () => {
@@ -177,6 +178,7 @@ export function LessonEnquiryForm() {
           </div>
         ) : null}
 
+        {isAdultOnly ? null : (
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <Label>Child&apos;s details</Label>
@@ -243,6 +245,7 @@ export function LessonEnquiryForm() {
             </div>
           ))}
         </div>
+        )}
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="availability">Preferred days / times</Label>
