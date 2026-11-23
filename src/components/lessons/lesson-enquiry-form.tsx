@@ -189,7 +189,7 @@ export function LessonEnquiryForm() {
           {children.map((child, index) => (
             <div
               key={index}
-              className="grid gap-3 rounded-2xl border border-border bg-ice-blue/30 p-4 sm:grid-cols-[1.4fr_0.8fr_1fr_auto]"
+              className="grid gap-3 rounded-2xl border border-border bg-ice-blue/30 p-4"
             >
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor={`child-name-${index}`} className="text-xs">
