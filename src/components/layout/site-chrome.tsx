@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { AnnouncementBar } from "@/components/shared/announcement-bar";
+import { CookieBanner } from "@/components/shared/cookie-banner";
 
 /** Hides the public nav/footer chrome on the staff admin area. */
 export function SiteChrome({ children }: { children: React.ReactNode }) {
@@ -22,6 +23,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <SiteFooter />
+      <CookieBanner />
     </>
   );
 }
