@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/data/site";
 import { emptyPerson, type PersonDetails } from "@/lib/data/person";
-import { PersonDetailsFields } from "@/components/shared/person-details-fields";
 import { submitContactForm } from "@/lib/actions/contact";
 
 const enquiryTypes = ["General enquiry", "Report a problem", "Private / party hire"];
@@ -53,11 +53,48 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      <PersonDetailsFields
-        value={person}
-        onChange={(patch) => setPerson((p) => ({ ...p, ...patch }))}
-        idPrefix="c"
-      />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="c-first-name">First name</Label>
+          <Input
+            id="c-first-name"
+            required
+            value={person.firstName}
+            onChange={(e) => setPerson((p) => ({ ...p, firstName: e.target.value }))}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="c-last-name">Last name</Label>
+          <Input
+            id="c-last-name"
+            required
+            value={person.lastName}
+            onChange={(e) => setPerson((p) => ({ ...p, lastName: e.target.value }))}
+          />
+        </div>
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="c-email">Your email</Label>
+          <Input
+            id="c-email"
+            type="email"
+            required
+            value={person.email}
+            onChange={(e) => setPerson((p) => ({ ...p, email: e.target.value }))}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="c-phone">Telephone</Label>
+          <Input
+            id="c-phone"
+            type="tel"
+            value={person.phone}
+            onChange={(e) => setPerson((p) => ({ ...p, phone: e.target.value }))}
+          />
+        </div>
+      </div>
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="c-type">What&apos;s this about?</Label>

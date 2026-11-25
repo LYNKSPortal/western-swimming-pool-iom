@@ -20,14 +20,8 @@ export async function submitContactForm(input: {
   const person = normalizePerson(input.person);
   const message = input.message.trim();
 
-  if (!person.firstName || !person.lastName || !person.email || !person.phone) {
-    return {
-      status: "error",
-      message: "Please fill in your name, email and telephone number.",
-    };
-  }
-  if (!person.addressLine1 || !person.postcode) {
-    return { status: "error", message: "Please fill in address line 1 and your postcode." };
+  if (!person.firstName || !person.lastName || !person.email) {
+    return { status: "error", message: "Please fill in your name and email." };
   }
   if (!isValidEmail(person.email)) {
     return { status: "error", message: "Please enter a valid email address." };
