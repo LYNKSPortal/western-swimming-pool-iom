@@ -119,6 +119,14 @@ export const termsConditions: LegalSection[] = [
       "Car seats, buggies and pushchairs should not be left in the changing rooms, as we don't have room for them.",
     ],
   },
+  {
+    title: "17. Website enquiries and your information",
+    body: [
+      "Every form on this website — including the swimming lesson sign-up form and the contact form — sends the details you enter directly to our reception team at reception@westernswimmingpool.im, where staff can read them and reply to you. This includes any children's details and, where you have consented, medical information you choose to share.",
+      "By submitting a form you confirm that the information you provide is accurate and, where it relates to a child, that you are the child's parent or legal guardian and are happy for us to hold and use that information to respond to your enquiry and arrange lessons.",
+      "Western Swimming Pool is registered with the Isle of Man Information Commissioner and handles all personal data, for both adults and children, in line with the Isle of Man's data protection legislation (the Data Protection Act 2018, which applies the GDPR in the Isle of Man). Our Privacy Policy explains in full what we collect, why, and the rights you have over your information.",
+    ],
+  },
 ];
 
 export const privacyPolicy: LegalSection[] = [
@@ -132,12 +140,16 @@ export const privacyPolicy: LegalSection[] = [
       "We may record or monitor our calls with you, or images of you, for the reasons listed below.",
       "You have rights to your information; these are detailed below.",
       "We retain your data for as long as is necessary.",
+      "Western Swimming Pool is registered with the Isle of Man Information Commissioner and handles personal data in line with the Isle of Man's data protection legislation (the Data Protection Act 2018, which applies the GDPR in the Isle of Man).",
     ],
   },
   {
     title: "1. What information do we collect about you?",
     body: [
       "We need information relating to your swimming lessons or other activities we provide. We need to collect this information from you to make sure we offer you the most relevant service. This can include personal information about you and other people you might want to be included in the profile we create when you enrol in swimming lessons and give us your data. It can also include personal information that we collect from other sources.",
+      "When you use a form on this website — such as the swimming lesson sign-up form or the contact form — the details you enter are emailed directly to our reception team at reception@westernswimmingpool.im so that staff can read them and respond. Depending on the form, this can include your name, date of birth, gender, address, contact details, details about your children (such as their names, ages and swimming ability) and, only where you have given consent, medical information.",
+      "Enquiries submitted through the swimming lesson sign-up form are also kept in a secure database so that staff can follow them up; children's details and medical information are only ever sent to reception@westernswimmingpool.im by email and are not stored in that database.",
+      "Medical information is only collected if you tick the consent box on the form. If you do not consent, do not include medical details in your submission — anything you are happy to discuss can instead be raised by phone or in person.",
     ],
   },
   {
@@ -192,7 +204,7 @@ export const privacyPolicy: LegalSection[] = [
   {
     title: "10. Complaints",
     body: [
-      "We work hard to make sure your personal information is treated safely and securely. If you have a complaint, please contact us using the details below. You also have the right to complain to the Information Commissioner's Office.",
+      "We work hard to make sure your personal information is treated safely and securely. If you have a complaint, please contact us using the details below. You also have the right to complain to the Isle of Man Information Commissioner, the island's data protection regulator.",
     ],
   },
   {
@@ -204,7 +216,7 @@ export const privacyPolicy: LegalSection[] = [
   {
     title: "12. Who to contact",
     body: [
-      "The Western Swimming Pool Board controls the processing of personal data on its systems. If you would like to discuss anything in relation to our services or how we handle your personal information, you can reach the Data Protection Officer by writing to: Data Protection Officer, The Western Swimming Pool Board, Western Swimming Pool, Derby Road, Peel, IM5 1SW. Telephone: 01624 842525.",
+      "The Western Swimming Pool Board controls the processing of personal data on its systems and is registered with the Isle of Man Information Commissioner under the Data Protection Act 2018. If you would like to discuss anything in relation to our services or how we handle your personal information, you can reach the Data Protection Officer by writing to: Data Protection Officer, The Western Swimming Pool Board, Western Swimming Pool, Derby Road, Peel, IM5 1SW. Telephone: 01624 842525. Email: reception@westernswimmingpool.im.",
     ],
   },
 ];
