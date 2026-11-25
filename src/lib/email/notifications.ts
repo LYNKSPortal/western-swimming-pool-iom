@@ -2,7 +2,42 @@ import "server-only";
 import { emailFrom, notificationsEmail, resend } from "@/lib/email/client";
 import { escapeHtml, renderBadge, renderEmail, renderFieldRows } from "@/lib/email/template";
 import { skillLevelOptions } from "@/lib/data/skill-levels";
+import type { PersonDetails } from "@/lib/data/person";
 import type { ChildInput } from "@/lib/actions/lesson-enquiry";
+
+function renderPersonRows(person: PersonDetails): Array<[string, string]> {
+  const address = [
+    person.addressLine1,
+    person.addressLine2,
+    person.addressLine3,
+    person.city,
+    person.county,
+    person.postcode,
+  ]
+    .filter(Boolean)
+    .join("\n");
+  const rows: Array<[string, string]> = [
+    ["Title", person.title],
+    ["First name", person.firstName],
+    ["Last name", person.lastName],
+    ["Preferred name", person.preferredName],
+    ["Date of birth", person.dateOfBirth],
+    ["Gender", person.gender],
+    ["Address", address],
+    ["Email", person.email],
+    ["Additional emails", person.additionalEmails],
+    ["Phone", person.phone ? `${person.phoneType}: ${person.phone}` : ""],
+    ["Additional phones", person.additionalPhones],
+  ];
+  if (person.medicalConsent) {
+    rows.push(
+      ["Medical consent", "Yes, consented to medical details being stored"],
+      ["Medical conditions", person.medicalConditions],
+      ["Medical notes", person.medicalNotes]
+    );
+  }
+  return rows;
+}
 
 function formatChildren(children: ChildInput[]) {
   if (children.length === 0) return "";
@@ -71,9 +106,8 @@ async function sendCustomerConfirmation(
 }
 
 export async function sendContactFormNotification(input: {
+  person: PersonDetails;
   name: string;
-  email: string;
-  phone: string;
   type: string;
   message: string;
 }) {
@@ -84,15 +118,13 @@ export async function sendContactFormNotification(input: {
     bodyHtml: `
       ${renderBadge(input.type)}
       ${renderFieldRows([
-        ["Name", input.name],
-        ["Email", input.email],
-        ["Telephone", input.phone],
+        ...renderPersonRows(input.person),
         ["Message", input.message],
       ])}
     `,
   });
 
-  const confirmation = sendCustomerConfirmation(input.email, {
+  const confirmation = sendCustomerConfirmation(input.person.email, {
     subject: "Thanks for getting in touch",
     preheader: "We've received your message and will be in touch soon",
     heading: "Thanks for getting in touch",
@@ -103,20 +135,24 @@ export async function sendContactFormNotification(input: {
     `,
   });
 
-  await Promise.all([confirmation, sendNotification(subject, html, input.email)]);
+  await Promise.all([confirmation, sendNotification(subject, html, input.person.email)]);
 }
 
 export async function sendNewsletterSignupNotification(input: {
+  title: string;
   firstName: string;
   lastName: string;
+  preferredName: string;
   email: string;
 }) {
   const html = renderEmail({
     preheader: `${input.firstName} ${input.lastName} signed up to the newsletter`,
     heading: "New newsletter sign-up",
     bodyHtml: renderFieldRows([
+      ["Title", input.title],
       ["First name", input.firstName],
       ["Last name", input.lastName],
+      ["Preferred name", input.preferredName],
       ["Email", input.email],
     ]),
   });
@@ -136,6 +172,7 @@ export async function sendNewsletterSignupNotification(input: {
 }
 
 export async function sendLessonEnquiryNotification(input: {
+  person: PersonDetails;
   parentName: string;
   parentPhone: string;
   parentEmail: string;
@@ -151,9 +188,7 @@ export async function sendLessonEnquiryNotification(input: {
     bodyHtml: `
       ${renderBadge(input.programmeName)}
       ${renderFieldRows([
-        ["Parent/guardian", input.parentName],
-        ["Phone", input.parentPhone],
-        ["Email", input.parentEmail],
+        ...renderPersonRows(input.person),
         ["Children", formatChildren(input.children)],
         ["Availability", input.availability],
         ["Message", input.message],

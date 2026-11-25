@@ -1,5 +1,6 @@
 "use server";
 
+import { displayName, normalizePerson, type PersonDetails } from "@/lib/data/person";
 import { sendContactFormNotification } from "@/lib/email/notifications";
 
 export type SubmitContactFormState = {
@@ -12,28 +13,33 @@ function isValidEmail(value: string) {
 }
 
 export async function submitContactForm(input: {
-  name: string;
-  email: string;
-  phone: string;
+  person: PersonDetails;
   type: string;
   message: string;
 }): Promise<SubmitContactFormState> {
-  const name = input.name.trim();
-  const email = input.email.trim();
+  const person = normalizePerson(input.person);
   const message = input.message.trim();
 
-  if (!name || !email || !message) {
-    return { status: "error", message: "Please fill in your name, email and message." };
+  if (!person.firstName || !person.lastName || !person.email || !person.phone) {
+    return {
+      status: "error",
+      message: "Please fill in your name, email and telephone number.",
+    };
   }
-  if (!isValidEmail(email)) {
+  if (!person.addressLine1 || !person.postcode) {
+    return { status: "error", message: "Please fill in address line 1 and your postcode." };
+  }
+  if (!isValidEmail(person.email)) {
     return { status: "error", message: "Please enter a valid email address." };
+  }
+  if (!message) {
+    return { status: "error", message: "Please include a message." };
   }
 
   try {
     await sendContactFormNotification({
-      name,
-      email,
-      phone: input.phone.trim(),
+      person,
+      name: displayName(person),
       type: input.type,
       message,
     });

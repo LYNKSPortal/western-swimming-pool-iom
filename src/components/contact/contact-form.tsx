@@ -2,21 +2,20 @@
 
 import { useState, useTransition } from "react";
 import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/data/site";
+import { emptyPerson, type PersonDetails } from "@/lib/data/person";
+import { PersonDetailsFields } from "@/components/shared/person-details-fields";
 import { submitContactForm } from "@/lib/actions/contact";
 
 const enquiryTypes = ["General enquiry", "Report a problem", "Private / party hire"];
 
 export function ContactForm() {
+  const [person, setPerson] = useState<PersonDetails>(emptyPerson());
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
     type: enquiryTypes[0],
     message: "",
   });
@@ -30,7 +29,7 @@ export function ContactForm() {
     setResult(null);
 
     startTransition(async () => {
-      const response = await submitContactForm(form);
+      const response = await submitContactForm({ person, ...form });
       if (response.status === "success") {
         setResult({ status: "success", message: response.message ?? "" });
       } else {
@@ -53,37 +52,11 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="c-name">Your full name</Label>
-          <Input
-            id="c-name"
-            required
-            value={form.name}
-            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="c-phone">Telephone</Label>
-          <Input
-            id="c-phone"
-            type="tel"
-            value={form.phone}
-            onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="c-email">Your email</Label>
-        <Input
-          id="c-email"
-          type="email"
-          required
-          value={form.email}
-          onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-        />
-      </div>
+      <PersonDetailsFields
+        value={person}
+        onChange={(patch) => setPerson((p) => ({ ...p, ...patch }))}
+        idPrefix="c"
+      />
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="c-type">What&apos;s this about?</Label>

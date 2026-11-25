@@ -12,12 +12,16 @@ function isValidEmail(value: string) {
 }
 
 export async function submitNewsletterSignup(input: {
+  title: string;
   firstName: string;
   lastName: string;
+  preferredName: string;
   email: string;
 }): Promise<SubmitNewsletterSignupState> {
+  const title = input.title;
   const firstName = input.firstName.trim();
   const lastName = input.lastName.trim();
+  const preferredName = input.preferredName.trim();
   const email = input.email.trim();
 
   if (!firstName || !lastName || !email) {
@@ -28,7 +32,7 @@ export async function submitNewsletterSignup(input: {
   }
 
   try {
-    await sendNewsletterSignupNotification({ firstName, lastName, email });
+    await sendNewsletterSignupNotification({ title, firstName, lastName, preferredName, email });
   } catch (error) {
     console.error("Failed to send newsletter signup email", error);
     return { status: "error", message: "Something went wrong, please try again." };

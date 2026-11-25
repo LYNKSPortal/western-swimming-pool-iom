@@ -23,6 +23,8 @@ import { Badge } from "@/components/ui/badge";
 import { lessonProgrammes } from "@/lib/data/lessons";
 import { siteConfig } from "@/lib/data/site";
 import { skillLevelOptions } from "@/lib/data/skill-levels";
+import { emptyPerson, type PersonDetails } from "@/lib/data/person";
+import { PersonDetailsFields } from "@/components/shared/person-details-fields";
 import { submitLessonEnquiry, type ChildInput } from "@/lib/actions/lesson-enquiry";
 
 const lessonPreferenceOptions = [
@@ -42,10 +44,8 @@ function emptyChild(): ChildInput {
 }
 
 export function LessonEnquiryForm() {
+  const [person, setPerson] = useState<PersonDetails>(emptyPerson());
   const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    email: "",
     programme: lessonProgrammes[0]?.slug ?? "",
     availability: "",
     message: "",
@@ -77,9 +77,7 @@ export function LessonEnquiryForm() {
     setResult(null);
 
     const payload = {
-      parentName: form.name,
-      parentPhone: form.phone,
-      parentEmail: form.email,
+      person,
       programmeSlug: form.programme,
       availability: form.availability,
       message: form.message,
@@ -129,38 +127,11 @@ export function LessonEnquiryForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        <div className="grid gap-5 sm:grid-cols-2">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="name">Your full name</Label>
-            <Input
-              id="name"
-              required
-              value={form.name}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="phone">Contact number</Label>
-            <Input
-              id="phone"
-              type="tel"
-              required
-              value={form.phone}
-              onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email">Your email</Label>
-          <Input
-            id="email"
-            type="email"
-            required
-            value={form.email}
-            onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-          />
-        </div>
+        <PersonDetailsFields
+          value={person}
+          onChange={(patch) => setPerson((p) => ({ ...p, ...patch }))}
+          idPrefix="le"
+        />
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="programme">Programme of interest</Label>

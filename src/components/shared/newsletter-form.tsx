@@ -3,11 +3,19 @@
 import { useState, useTransition } from "react";
 import { AlertCircle, ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { titleOptions } from "@/lib/data/person";
 import { submitNewsletterSignup } from "@/lib/actions/newsletter";
 
 export function NewsletterForm() {
-  const [form, setForm] = useState({ firstName: "", lastName: "", email: "" });
+  const [form, setForm] = useState({
+    title: titleOptions[0],
+    firstName: "",
+    lastName: "",
+    preferredName: "",
+    email: "",
+  });
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<{ status: "success" | "error"; message: string } | null>(
     null
@@ -41,6 +49,29 @@ export function NewsletterForm() {
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+      <div className="grid grid-cols-[1fr_2fr] gap-2">
+        <Select
+          name="title"
+          aria-label="Title"
+          value={form.title}
+          onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+          className="border-white/15 bg-white/10 text-white"
+        >
+          {titleOptions.map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
+        </Select>
+        <Input
+          name="preferredName"
+          placeholder="Preferred name"
+          aria-label="Preferred name"
+          value={form.preferredName}
+          onChange={(e) => setForm((f) => ({ ...f, preferredName: e.target.value }))}
+          className="border-white/15 bg-white/10 text-white placeholder:text-white/40"
+        />
+      </div>
       <div className="grid grid-cols-2 gap-2">
         <Input
           required

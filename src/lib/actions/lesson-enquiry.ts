@@ -2,6 +2,7 @@
 
 import { insertLessonEnquiry } from "@/lib/db/lesson-enquiries";
 import { getLessonBySlug } from "@/lib/data/lessons";
+import { displayName, normalizePerson, type PersonDetails } from "@/lib/data/person";
 import { sendLessonEnquiryNotification } from "@/lib/email/notifications";
 
 export type SubmitLessonEnquiryState = {
@@ -26,20 +27,22 @@ export type ChildInput = {
 // by design, same as the rest of this form).
 
 export async function submitLessonEnquiry(input: {
-  parentName: string;
-  parentPhone: string;
-  parentEmail: string;
+  person: PersonDetails;
   programmeSlug: string;
   availability: string;
   message: string;
   children: ChildInput[];
 }): Promise<SubmitLessonEnquiryState> {
-  const parentName = input.parentName.trim();
-  const parentPhone = input.parentPhone.trim();
-  const parentEmail = input.parentEmail.trim();
+  const person = normalizePerson(input.person);
+  const parentName = displayName(person);
+  const parentPhone = person.phone;
+  const parentEmail = person.email;
 
-  if (!parentName || !parentPhone || !parentEmail) {
+  if (!person.firstName || !person.lastName || !parentPhone || !parentEmail) {
     return { status: "error", message: "Please fill in your name, phone number and email." };
+  }
+  if (!person.addressLine1 || !person.postcode) {
+    return { status: "error", message: "Please fill in address line 1 and your postcode." };
   }
   if (!isValidEmail(parentEmail)) {
     return { status: "error", message: "Please enter a valid email address." };
@@ -81,6 +84,7 @@ export async function submitLessonEnquiry(input: {
   }
 
   await sendLessonEnquiryNotification({
+    person,
     parentName,
     parentPhone,
     parentEmail,
