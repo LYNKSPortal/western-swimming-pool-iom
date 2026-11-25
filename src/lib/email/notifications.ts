@@ -138,39 +138,6 @@ export async function sendContactFormNotification(input: {
   await Promise.all([confirmation, sendNotification(subject, html, input.person.email)]);
 }
 
-export async function sendNewsletterSignupNotification(input: {
-  title: string;
-  firstName: string;
-  lastName: string;
-  preferredName: string;
-  email: string;
-}) {
-  const html = renderEmail({
-    preheader: `${input.firstName} ${input.lastName} signed up to the newsletter`,
-    heading: "New newsletter sign-up",
-    bodyHtml: renderFieldRows([
-      ["Title", input.title],
-      ["First name", input.firstName],
-      ["Last name", input.lastName],
-      ["Preferred name", input.preferredName],
-      ["Email", input.email],
-    ]),
-  });
-
-  const confirmation = sendCustomerConfirmation(input.email, {
-    subject: "You're on the list",
-    preheader: "Thanks for subscribing to the Western Swimming Pool newsletter",
-    heading: "You're on the list",
-    bodyHtml: `
-      <p style="margin:0 0 12px;">Hi ${escapeHtml(input.firstName)},</p>
-      <p style="margin:0 0 12px;">Thanks for signing up for the latest news from Western Swimming Pool &mdash; we&apos;ll keep you posted on timetables, lessons and what&apos;s on.</p>
-      <p style="margin:0;">If you ever need anything, just reply to this email and it will come straight through to our reception team.</p>
-    `,
-  });
-
-  await Promise.all([confirmation, sendNotification("New newsletter sign-up", html, input.email)]);
-}
-
 export async function sendLessonEnquiryNotification(input: {
   person: PersonDetails;
   parentName: string;

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { Container } from "@/components/shared/container";
 import { footerNav, siteConfig } from "@/lib/data/site";
-import { NewsletterForm } from "@/components/shared/newsletter-form";
 
 function FacebookIcon({ className }: { className?: string }) {
   return (
@@ -16,7 +15,7 @@ function FacebookIcon({ className }: { className?: string }) {
 export function SiteFooter() {
   return (
     <footer className="bg-deep-ink text-white/80">
-      <Container className="grid gap-12 py-16 lg:grid-cols-[1.3fr_2fr_1.3fr]">
+      <Container className="grid gap-12 py-16 lg:grid-cols-[1.3fr_2fr]">
         <div className="flex flex-col gap-5">
           <Link href="/" className="flex items-center gap-3" aria-label="Western Swimming Pool home">
             <Image
@@ -76,16 +75,6 @@ export function SiteFooter() {
               </ul>
             </div>
           ))}
-        </div>
-
-        <div className="flex flex-col gap-4">
-          <h3 className="font-display text-sm font-bold uppercase tracking-wide text-white">
-            Get the latest news
-          </h3>
-          <p className="text-sm text-white/60">
-            Sign up for our newsletter and stay in the loop on your local pool.
-          </p>
-          <NewsletterForm />
         </div>
       </Container>
 
