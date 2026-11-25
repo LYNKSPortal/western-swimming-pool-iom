@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -107,6 +108,17 @@ export function ContactForm() {
           </>
         )}
       </Button>
+      <p className="text-xs text-muted-foreground">
+        By filling out this form you agree to our{" "}
+        <Link href="/terms-conditions" className="font-semibold text-western-red hover:underline">
+          terms &amp; conditions
+        </Link>{" "}
+        and{" "}
+        <Link href="/privacy-policy" className="font-semibold text-western-red hover:underline">
+          privacy policy
+        </Link>
+        .
+      </p>
     </form>
   );
 }

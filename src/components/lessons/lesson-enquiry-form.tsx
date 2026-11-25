@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import {
   ShieldCheck,
@@ -318,6 +319,17 @@ export function LessonEnquiryForm() {
         <p className="flex items-center gap-2 text-xs text-muted-foreground">
           <Phone className="size-3.5" /> Prefer to talk it through first? Call us on{" "}
           {siteConfig.phone}.
+        </p>
+        <p className="text-xs text-muted-foreground">
+          By filling out this form you agree to our{" "}
+          <Link href="/terms-conditions" className="font-semibold text-western-red hover:underline">
+            terms &amp; conditions
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy-policy" className="font-semibold text-western-red hover:underline">
+            privacy policy
+          </Link>
+          .
         </p>
       </form>
     </Card>
